@@ -22,50 +22,69 @@
 /characters/{id}/pictures
 */
 
-const chooseAnimOrCharTitle = () => {
-    const topic = ['anime', 'character']
+const chooseAnimorCharNumber = () => {
 
-    const randomTopic = Math.floor(Math.random() * topic.length)
+    const imageArr = [
+        {type: 'anime', num: 11061}, 
+        {type: 'anime', num: 21},
+        {type: 'anime', num: 1535},
+        {type: 'anime', num: 20583},
+        {type: 'anime', num: 38000},
+        {type: 'anime', num: 20},
+        {type: 'anime', num: 1735},
+        {type: 'characters', num: 27},
+        {type: 'characters', num: 28},
+        {type: 'characters', num: 30},
+        {type: 'characters', num: 20594},
+        {type: 'characters', num: 64},
+        {type: 'characters', num: 723},
+        {type: 'characters', num: 62},
+        {type: 'characters', num: 29},
+        {type: 'characters', num: 13767},
+        {type: 'characters', num: 309},
+        {type: 'characters', num: 724},
+        {type: 'characters', num: 5627},
+        {type: 'characters', num: 305},
+        {type: 'characters', num: 61},
+        {type: 'characters', num: 18938},
+        {type: 'characters', num: 2072},
+        {type: 'characters', num: 727},
+        {type: 'characters', num: 2064},
+        {type: 'characters', num: 2751},
 
-    return topic[randomTopic]
+    ]
+
+    const getRandomImage = Math.floor(Math.random() * imageArr.length)
+
+    return imageArr[getRandomImage]
+
 }
 
-const chooseAnimorCharNumber = (char) => {
-    
-    const animeNumArr = [11061, 21, 1535, 20583, 38000, 20, 1735]
 
-    const charNumArr = [27, 28, 30, 20594, 64, 723, 62, 29]
-
-    if(char === 'anime'){
-        const randomAnime = Math.floor(Math.random() * animeNumArr.length)
-
-        return animeNumArr[randomAnime]
-    } else {
-        const randomChar = Math.floor(Math.random() * charNumArr.length)
-
-        return charNumArr[randomChar]
-    }
-}
-
-console.log(chooseAnimOrCharTitle())
-
-console.log(chooseAnimorCharNumber(chooseAnimOrCharTitle()))
-
-const getBodyImage = async (char, num) => {
+const getBodyImage = async (img) => {
     try{
-        const res = await fetch(`https://api.jikan.moe/v4/${char}/${num}/pictures`)
+        const res = await fetch(`https://api.jikan.moe/v4/${img.type}/${img.num}/pictures`)
         if(!res.ok){
-            throw Error('Error status:', res.status)
+            throw new Error('Response status:', res.status)
         }
 
-        const data = await res.json()
+       const data = await res.json()
 
-        return console.log(data.data)
+       const dataArr = data.data
+
+       const getRandomImage = Math.floor(Math.random() * dataArr.length)
+
+       img.type === `anime` ? document.body.style.backgroundImage = `url(${dataArr[getRandomImage].webp.large_image_url})` :
+
+       document.body.style.backgroundImage = `url(${dataArr[getRandomImage].jpg.image_url})`
+
+       return console.log(dataArr)
 
     }
     catch(error){
+        document.body.style.backgroundImage = 'url(images/luffy_img.jpeg)'
         console.error('Error status:', error)
     }
 }
 
-getBodyImage('anime', 30)
+getBodyImage(chooseAnimorCharNumber())
