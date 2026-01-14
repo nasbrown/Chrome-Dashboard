@@ -4,8 +4,7 @@
 }
 
 body{
-    background-image: url('images/luffy_img.jpeg');
-    background-repeat: repeat-x;
+    background-repeat: repeat;
     image-rendering: pixelated;
     background-size: contain;
     background-position: center;

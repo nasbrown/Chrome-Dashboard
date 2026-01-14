@@ -65,7 +65,7 @@ const getBodyImage = async (img) => {
     try{
         const res = await fetch(`https://api.jikan.moe/v4/${img.type}/${img.num}/pictures`)
         if(!res.ok){
-            throw new Error('Response status:', res.status)
+            throw new Error(`Response status: ${res.status}`)
         }
 
        const data = await res.json()
@@ -82,9 +82,27 @@ const getBodyImage = async (img) => {
 
     }
     catch(error){
-        document.body.style.backgroundImage = 'url(images/luffy_img.jpeg)'
+        document.body.style.backgroundImage = 'url(images/zoro.jpg)'
         console.error('Error status:', error)
     }
 }
 
-getBodyImage(chooseAnimorCharNumber())
+const executeOnceADay = (imgFunc) => {
+    let currentDay = new Date()
+
+    //(hour, min, sec, ms) in setHours
+    currentDay.setHours(20, 39, 0, 0)
+
+    let getCurrentTime = currentDay.getTime()
+
+    const saveTimeToLocalStor = localStorage.getItem('imageOnceADay')
+
+    if(!saveTimeToLocalStor || parseInt(saveTimeToLocalStor, 10) < getCurrentTime){
+        imgFunc()
+        localStorage.setItem('imageOnceADay', JSON.stringify(getCurrentTime))
+    }
+}
+
+executeOnceADay(() => {
+    getBodyImage(chooseAnimorCharNumber())
+})
