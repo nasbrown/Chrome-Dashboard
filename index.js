@@ -22,6 +22,8 @@
 /characters/{id}/pictures
 */
 
+
+
 const chooseAnimorCharNumber = () => {
 
     const imageArr = [
@@ -51,7 +53,6 @@ const chooseAnimorCharNumber = () => {
         {type: 'characters', num: 727},
         {type: 'characters', num: 2064},
         {type: 'characters', num: 2751},
-
     ]
 
     const getRandomImage = Math.floor(Math.random() * imageArr.length)
@@ -61,7 +62,8 @@ const chooseAnimorCharNumber = () => {
 }
 
 
-const getBodyImage = async (img) => {
+const getBodyImage = async (img = {}) => {
+    
     try{
         const res = await fetch(`https://api.jikan.moe/v4/${img.type}/${img.num}/pictures`)
         if(!res.ok){
@@ -74,35 +76,35 @@ const getBodyImage = async (img) => {
 
        const getRandomImage = Math.floor(Math.random() * dataArr.length)
 
-       img.type === `anime` ? document.body.style.backgroundImage = `url(${dataArr[getRandomImage].webp.large_image_url})` :
-
-       document.body.style.backgroundImage = `url(${dataArr[getRandomImage].jpg.image_url})`
-
-       return console.log(dataArr)
+       if(img.type === 'anime'){
+            document.body.style.backgroundImage = `url(${dataArr[getRandomImage].webp.large_image_url})`
+            localStorage.setItem('bodyImage', `url(${dataArr[getRandomImage].webp.large_image_url})`)
+       } else{
+            document.body.style.backgroundImage = `url(${dataArr[getRandomImage].jpg.image_url})`
+            localStorage.setItem('bodyImage', `url(${dataArr[getRandomImage].jpg.image_url})`)
+       }
 
     }
     catch(error){
         document.body.style.backgroundImage = 'url(images/zoro.jpg)'
-        console.error('Error status:', error)
+        console.error('Error status: ', error)
     }
 }
 
-const executeOnceADay = (imgFunc) => {
-    let currentDay = new Date()
+const getImgOnceADay = () => {
+    
+    const todayDate = new Date().toLocaleDateString()
 
-    //(hour, min, sec, ms) in setHours
-    currentDay.setHours(20, 39, 0, 0)
+    localStorage.setItem('currentDate', todayDate)
 
-    let getCurrentTime = currentDay.getTime()
+    let dateFromLocalStor = localStorage.getItem('currentDate')
 
-    const saveTimeToLocalStor = localStorage.getItem('imageOnceADay')
-
-    if(!saveTimeToLocalStor || parseInt(saveTimeToLocalStor, 10) < getCurrentTime){
-        imgFunc()
-        localStorage.setItem('imageOnceADay', JSON.stringify(getCurrentTime))
+    if(todayDate === dateFromLocalStor){
+        document.body.style.backgroundImage = localStorage.getItem('bodyImage')
+    } else {
+        getBodyImage(chooseAnimorCharNumber())
     }
 }
 
-executeOnceADay(() => {
-    getBodyImage(chooseAnimorCharNumber())
-})
+getImgOnceADay()
+
