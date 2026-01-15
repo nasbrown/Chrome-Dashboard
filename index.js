@@ -1,3 +1,4 @@
+
 document.addEventListener('mouseover', (e) => {
     if(e.target.id === 'link'){
         console.log('Link is being clicked')
@@ -86,19 +87,24 @@ const getBodyImage = async (img = {}) => {
 }
 
 const getImgOnceADay = () => {
-    
-    const todayDate = new Date().toLocaleDateString()
 
-    localStorage.setItem('currentDate', todayDate)
+   const todayDate = new Date().toLocaleDateString()
+   const lastDate = localStorage.getItem('lastDate')
 
-    let dateFromLocalStor = localStorage.getItem('currentDate')
+   if(!lastDate){
+    localStorage.setItem('lastDate', new Date().toLocaleDateString())
+   } else if(!localStorage.getItem('bodyImage')){
+    localStorage.setItem('bodyImage', `url(images/zoro.jpg), linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5))`)
+   }
 
-    if(todayDate === dateFromLocalStor){
-        document.body.style.backgroundImage = localStorage.getItem('bodyImage')
-    } else {
-        getBodyImage(chooseAnimorCharNumber())
-    }
+   if(todayDate !== lastDate){
+    getBodyImage(chooseAnimorCharNumber())
+    localStorage.setItem('lastDate', todayDate)
+   } else{
+    document.body.style.backgroundImage = localStorage.getItem('bodyImage')
+   }
 }
 
 getImgOnceADay()
+
 
