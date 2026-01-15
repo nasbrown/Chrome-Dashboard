@@ -1,4 +1,8 @@
-
+document.addEventListener('mouseover', (e) => {
+    if(e.target.id === 'link'){
+        console.log('Link is being clicked')
+    } 
+})
 
 //Clock
 
@@ -67,16 +71,16 @@ const getBodyImage = async (img = {}) => {
        const getRandomImage = Math.floor(Math.random() * dataArr.length)
 
        if(img.type === 'anime'){
-            document.body.style.backgroundImage = `url(${dataArr[getRandomImage].webp.large_image_url})`
-            localStorage.setItem('bodyImage', `url(${dataArr[getRandomImage].webp.large_image_url})`)
+            document.body.style.backgroundImage = `url(${dataArr[getRandomImage].webp.large_image_url}), linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5))`
+            localStorage.setItem('bodyImage', `url(${dataArr[getRandomImage].webp.large_image_url}), linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5))`)
        } else{
-            document.body.style.backgroundImage = `url(${dataArr[getRandomImage].jpg.image_url})`
-            localStorage.setItem('bodyImage', `url(${dataArr[getRandomImage].jpg.image_url})`)
+            document.body.style.backgroundImage = `url(${dataArr[getRandomImage].jpg.image_url}), linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5))`
+            localStorage.setItem('bodyImage', `url(${dataArr[getRandomImage].jpg.image_url}), linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5))`)
        }
 
     }
     catch(error){
-        document.body.style.backgroundImage = 'url(images/zoro.jpg)'
+        document.body.style.backgroundImage = 'url(images/zoro.jpg), linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5))'
         console.error('Error status: ', error)
     }
 }
