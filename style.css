@@ -55,8 +55,17 @@ h1{
     pointer-events: none;
 }
 
+#link-input{
+    text-shadow: none;
+    color: #000000;
+}
+
 .drop-shadow{
     filter: drop-shadow(0 0 5px #000000);
+}
+
+.hidden{
+    display: none;
 }
 
 

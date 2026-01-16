@@ -1,9 +1,14 @@
 
-document.addEventListener('mouseover', (e) => {
+document.addEventListener('click', (e) => {
     if(e.target.id === 'link'){
-        console.log('Link is being clicked')
+        dropDownLink()
     } 
 })
+
+const dropDownLink = () => {
+    const linkDrop = document.getElementById('link-form')
+    const linkInp = document.getElementById('link-input')
+}
 
 //Clock
 
