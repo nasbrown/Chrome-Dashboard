@@ -1,14 +1,4 @@
 
-document.addEventListener('click', (e) => {
-    if(e.target.id === 'link'){
-        dropDownLink()
-    } 
-})
-
-const dropDownLink = () => {
-    const linkDrop = document.getElementById('link-form')
-    const linkInp = document.getElementById('link-input')
-}
 
 //Clock
 

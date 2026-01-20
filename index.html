@@ -3,6 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Personall Dashboard</title>
 </head>
 <body>
@@ -18,9 +19,13 @@
                             </svg>   
                             Links
                         </a>
-                        <div>
-                            <form id="link-form" class="hidden">
-                                <input id="link-input" name="link-input" type="text" placeholder="Add a new link">
+                        <div class="link-formwrap" id="link-formwrap">
+                            <svg class="triangle" width="40" height="31" viewBox="0 0 40 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M19.9186 0L39.8372 30.6667H-5.72205e-06L19.9186 0Z" fill="#464646"/>
+                            </svg>
+                            <form id="link-form">
+                                <i class="fa-solid fa-plus"></i>
+                                <input id="link-input" name="link-input" type="url" placeholder="Add a new link">
                             </form>
                         </div>
                     </div>

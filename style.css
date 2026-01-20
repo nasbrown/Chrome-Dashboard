@@ -24,11 +24,6 @@ body{
     height: 100vh;
 }
 
-.dash-container div:nth-child(2){
-    display: flex;
-    justify-content: center;
-}
-
 h1{
     font-weight: 700;
     font-size: 5rem;
@@ -55,18 +50,54 @@ h1{
     pointer-events: none;
 }
 
+.link-contain div:first-child{
+    position: relative;
+}
+
+.link-contain div:first-child:hover .link-formwrap, .link-formwrap:hover{
+    display: flex;
+}
+
+.link-formwrap{
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    right: calc(-75px - 2rem);
+    transition: all ease-in 2ms;
+}
+
+.show{
+    display: flex;
+}
+
+.triangle{
+    display: block;
+    transition-delay: 0ms;
+}
+
+#link-form{
+    display: flex;
+    transition-delay: 0ms;
+    flex-direction: row;
+    background-color: #464646;
+    margin-top: -.05rem;
+    padding: 1rem;
+    transition-delay: 0ms;
+}
+
 #link-input{
     text-shadow: none;
-    color: #000000;
+    background-color: #464646;
+    color: rgba(255, 255, 255, .71);
+    border: none;
+    transition-delay: 0ms;
 }
 
 .drop-shadow{
     filter: drop-shadow(0 0 5px #000000);
 }
 
-.hidden{
-    display: none;
-}
+
 
 
 
