@@ -54,7 +54,7 @@ h1{
     position: relative;
 }
 
-.link-contain div:first-child:hover .link-formwrap, .link-formwrap:hover{
+.link-contain div:first-child:hover .link-formwrap, .link-formwrap:hover, .link-formwrap:active{
     display: flex;
 }
 
@@ -62,7 +62,7 @@ h1{
     display: none;
     flex-direction: column;
     position: absolute;
-    right: calc(-75px - 2rem);
+    right: calc(-75px - 5rem);
     transition: all ease-in 2ms;
 }
 
@@ -90,6 +90,7 @@ h1{
     background-color: #464646;
     color: rgba(255, 255, 255, .71);
     border: none;
+    width: 12rem;
     transition-delay: 0ms;
 }
 

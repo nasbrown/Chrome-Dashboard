@@ -1,4 +1,50 @@
 
+//Links
+
+document.addEventListener('submit', (e) => {
+    if(e.target.id === 'link-form'){
+        e.preventDefault()
+        const linkInput = document.getElementById('link-input')
+        const linkDivWrap = document.getElementById('linkdiv-wrap')
+        getFaviconImage(linkInput.value)
+        renderLink(linkInput.value)
+    }
+})
+
+const getFaviconImage = (website) => {
+    console.log(`https://favicone.com/${website}?json`)
+}
+
+const getLinkHTML = (website) => {
+   return `
+        <div class="show">
+            <img src="${`https://favicone.com/${website}`}">
+            <p>${getLinkTitle(website)}</p>
+        </div>
+    `
+}
+
+const getLinkTitle = async (website) => {
+    try {
+        const res = await fetch(`https://title.mihir.ch/https://${website}`)
+
+        if(!res.ok){
+            throw new Error(`Response status: ${res.status}`)
+        }
+
+        const data = await res.json()
+
+        return `${data}`
+
+    } catch (error) {
+        console.error(`Error status: `, error)
+    }
+}
+
+const renderLink = (website) => {
+    const linkDivWrap = document.getElementById('linkdiv-wrap')
+    return linkDivWrap.innerHTML += getLinkHTML(website)
+}
 
 //Clock
 
