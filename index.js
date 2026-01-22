@@ -10,7 +10,7 @@ document.addEventListener('submit', (e) => {
         const userInput = fixAnyInputLink(linkInput.value)
 
         if(userInput !== ''){
-            renderLink(linkInput.value)
+            renderLink(userInput)
         } else{
             alert('Please enter a link')
         }
