@@ -23,7 +23,7 @@ const getLinkHTML = async (website) => {
 
     return `
         <div class="show" style="width: 100%;">
-            <a>
+            <a href="${website}">
                 <img src="${image}">
                 <p>${title}</p>
             </a>
