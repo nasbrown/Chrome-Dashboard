@@ -53,25 +53,23 @@ const getLinkTitle = async (website) => {
     try {
         const { data } = await mql(`${website}`)
 
-        if(!data.author){
-            return website.replace('https://', '')
-        } else{
-            return data.author
-        }
-
+        return data.author
+        
     } catch (error) {
         console.error(`Error status: `, error)
+        return website.replace('https://', '')
     }
 }
 
 const getLinkImage = async (website) => {
     try {
         const { data } = await mql(`${website}`)
-
-        return data.logo.url
+        
+        return data.logo.url   
 
     } catch (error) {
         console.error(`Error status: `, error)
+         return `images/noimage.png`
     }
 }
 
