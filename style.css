@@ -75,7 +75,7 @@ h1{
     flex-direction: row;
     column-gap: .5rem;
     background-color: #464646;
-    
+    padding: .5rem;
 }
 
 .link-flex p{
