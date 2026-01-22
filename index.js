@@ -7,7 +7,7 @@ document.addEventListener('submit', (e) => {
         e.preventDefault()
         const linkInput = document.getElementById('link-input')
 
-        const userInput = fixAnyInput(linkInput.value)
+        const userInput = fixAnyInputLink(linkInput.value)
 
         if(userInput !== ''){
             renderLink(linkInput.value)
