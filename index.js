@@ -40,7 +40,7 @@ const fixAnyInputLink = (website) => {
 
     const cleanURL = new URL(inputURL)
 
-    if(!cleanURL.hostname.includes('.'){
+    if(!cleanURL.hostname.includes('.')){
         return alert('Please enter a link with .com/.edu and.etc')
     } else if(!cleanURL){
         return alert('Please enter a real website')
