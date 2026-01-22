@@ -51,7 +51,7 @@ const fixAnyInputLink = (website) => {
 
 const getLinkTitle = async (website) => {
     try {
-        const { data } = await mql(`${encodeURIComponent(website)}`)
+        const { data } = await mql(`${website}`)
 
         return data.author
         
@@ -63,7 +63,7 @@ const getLinkTitle = async (website) => {
 
 const getLinkImage = async (website) => {
     try {
-        const { data } = await mql(`${encodeURIComponent(website)}`)
+        const { data } = await mql(`${website}`)
         
         return data.logo.url   
 
