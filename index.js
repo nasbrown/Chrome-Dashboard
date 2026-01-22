@@ -7,7 +7,9 @@ document.addEventListener('submit', (e) => {
         e.preventDefault()
         const linkInput = document.getElementById('link-input')
 
-        if(linkInput.value !== ''){
+        const userInput = fixAnyInput(linkInput.value)
+
+        if(userInput !== ''){
             renderLink(linkInput.value)
         } else{
             alert('Please enter a link')
@@ -27,6 +29,24 @@ const getLinkHTML = async (website) => {
             </a>
         </div>
     `
+}
+
+const fixAnyInputLink = (website) => {
+    let inputURL = website.trim()
+
+    if(!/^https?:\/\//i.test(inputURL)){
+        inputURL = `https://${inputURL}`
+    }
+
+    const cleanURL = new URL(inputURL)
+
+    if(!cleanURL.hostname.includes('.'){
+        return alert('Please enter a link with .com/.edu and.etc')
+    } else if(!cleanURL){
+        return alert('Please enter a real website')
+    } else{
+        return cleanURL.toString()
+    }
 }
 
 const getLinkTitle = async (website) => {
