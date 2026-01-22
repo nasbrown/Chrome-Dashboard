@@ -70,6 +70,12 @@ h1{
     display: flex;
 }
 
+.link-flex{
+    display: flex;
+    flex-direction: row;
+    column-gap: .5rem;
+}
+
 .triangle{
     display: block;
     transition-delay: 0ms;
