@@ -35,7 +35,7 @@ h1{
     flex-direction: row;
 }
 
-.link-contain a{
+#link, #focus, #wordle, #calendar{
     display: flex;
     font-weight: 600;
     flex-direction: column;
