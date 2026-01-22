@@ -76,6 +76,8 @@ h1{
     column-gap: .5rem;
     background-color: #464646;
     padding: .5rem;
+    align-items: center;
+    text-decoration: none;
 }
 
 .link-flex p{

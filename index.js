@@ -2,33 +2,35 @@ import mql from 'https://esm.sh/@microlink/mql'
 
 //Links
 
-document.addEventListener('submit', (e) => {
+document.addEventListener('submit', async (e) => {
     if(e.target.id === 'link-form'){
         e.preventDefault()
         const linkInput = document.getElementById('link-input')
 
         const userInput = fixAnyInputLink(linkInput.value)
 
+        const linkDataArr = await getLinkArr(userInput)
+
         if(userInput !== ''){
-            renderLink(userInput)
+            renderLink(linkDataArr)
+            linkInput.value = ''
         } else{
             alert('Please enter a link')
         }
     }
 })
 
-const getLinkHTML = async (website) => {
-    const title = await getLinkTitle(website)
-    const image = await getLinkImage(website)
-
-    return `
-        <div>
-            <a class="link-flex" href="${website}" target="_blank">
-                <img width="50px" height="50px" src="${image}">
-                <p>${title}</p>
+const getLinkHTML = (arr) => {
+    return arr.map((web) => {
+        return `
+            <div>
+            <a class="link-flex" href="${web.linkName}" target="_blank">
+                <img width="32px" height="32px" src="${web.linkImg}">
+                <p>${web.linkTitle}</p>
             </a>
         </div>
-    `
+        `
+    }).join('')
 }
 
 const fixAnyInputLink = (website) => {
@@ -53,7 +55,9 @@ const getLinkTitle = async (website) => {
     try {
         const { data } = await mql(`${website}`)
 
-        return data.author
+        console.log(data)
+
+        return data.publisher
         
     } catch (error) {
         console.error(`Error status: `, error)
@@ -73,9 +77,32 @@ const getLinkImage = async (website) => {
     }
 }
 
-const renderLink = async (website) => {
+const getLinkArr = async (website) => {
+    const title = await getLinkTitle(website)
+    const image = await getLinkImage(website)
+
+    let linkArrFromLocalStor = JSON.parse(localStorage.getItem(`linkArr`))
+    let linkArr = []
+
+    if(!linkArrFromLocalStor){
+        linkArrFromLocalStor = linkArr
+        localStorage.setItem('linkArr', JSON.stringify(linkArr))
+    }
+
+    
+
+    linkArrFromLocalStor.unshift({
+        linkTitle: title,
+        linkImg: image,
+        linkName: website,
+    })
+
+    return linkArrFromLocalStor
+}
+
+const renderLink = (arr = []) => {
     const linkDivWrap = document.getElementById('linkdiv-wrap')
-    return linkDivWrap.innerHTML += await getLinkHTML(website)
+    return linkDivWrap.innerHTML = getLinkHTML(arr)
 }
 
 //Clock
