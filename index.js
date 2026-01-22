@@ -22,7 +22,7 @@ const getLinkHTML = async (website) => {
     const image = await getLinkImage(website)
 
     return `
-        <div class="show" style="width: 100%;">
+        <div class="link-flex">
             <a href="${website}" target="_blank">
                 <img src="${image}">
                 <p>${title}</p>
