@@ -81,24 +81,17 @@ const getLinkArr = async (website) => {
     const title = await getLinkTitle(website)
     const image = await getLinkImage(website)
 
-    let linkArrFromLocalStor = JSON.parse(localStorage.getItem(`linkArr`))
     let linkArr = []
 
-    if(!linkArrFromLocalStor){
-        linkArrFromLocalStor = linkArr
-        localStorage.setItem('linkArr', JSON.stringify(linkArr))
-    }
-
-    
-
-    linkArrFromLocalStor.unshift({
+    linkArr.unshift({
         linkTitle: title,
         linkImg: image,
         linkName: website,
     })
 
-    return linkArrFromLocalStor
+    return linkArr
 }
+
 
 const renderLink = (arr = []) => {
     const linkDivWrap = document.getElementById('linkdiv-wrap')
