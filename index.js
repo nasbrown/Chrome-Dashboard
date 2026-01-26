@@ -1,7 +1,7 @@
 import mql from 'https://esm.sh/@microlink/mql'
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
 
-//Links
+//Event Listeners for Link components, etc.
 
 document.addEventListener('submit', async (e) => {
     if(e.target.id === 'link-form'){
@@ -23,10 +23,35 @@ document.addEventListener('submit', async (e) => {
 })
 
 document.addEventListener('click', (e) => {
+
+    const mainDash = document.querySelector('.dash-container')
+    const pomoDash = document.querySelector('.pomo-container')
+    
     if(e.target.dataset.linkId){
         mainLinkArr.deleteLink(e.target.dataset.linkId)
+    } else if(e.target.id === 'focus'){
+        pomoDash.classList.toggle('hidden')
+        mainDash.classList.toggle('hidden')
+    } 
+    else if(e.target.id === 'return'){
+        pomoDash.classList.toggle('hidden')
+        mainDash.classList.toggle('hidden')
     }
 })
+
+//Pomodoro Timer
+
+const pomoMethods = () => {
+    return{
+        elementVar: {
+            countDownElem: document.querySelector('.countdown h1'),
+            timerBtn: document.querySelectorAll('.timer-btn'),
+            
+        }
+    }
+}
+
+//Link component
 
 const getLinkHTML = (arr) => {
     return arr.map((web) => {
@@ -106,19 +131,16 @@ const createLinkArr = () => {
             return localStorsLinkArr
         },
         deleteLink: function(link) {
-            let revisedLinkArr = localStorsLinkArr.filter((website) => {
+            localStorsLinkArr = localStorsLinkArr.filter((website) => {
                 if(link === website.uuid){
-                    console.log(link)
                     return false
                 }
 
-                return true
+                    return true
             })
 
-            console.log(revisedLinkArr)
-
-            localStorage.setItem('mainArrLink', JSON.stringify([...revisedLinkArr]))
-            renderLink([...revisedLinkArr])
+            localStorage.setItem('mainArrLink', JSON.stringify(localStorsLinkArr))
+            renderLink(localStorsLinkArr)
         }
     }
 }
@@ -135,15 +157,6 @@ const getLinkArr = async (website) => {
         linkName: website,
         uuid: uuidv4(),
     })
-
-    console.log(mainLinkArr.newLink({
-        linkTitle: title,
-        linkImg: image,
-        linkName: website,
-        uuid: uuidv4(),
-    }))
-
-    console.log(mainLinkArr.getLinks())
 
     return mainLinkArr.getLinks()
 }

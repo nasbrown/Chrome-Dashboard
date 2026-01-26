@@ -8,7 +8,7 @@
 </head>
 <body>
     <main>
-        <div class="dash-container">
+        <div class="dash-container hidden">
             <div class="top-menu">
                 <div class="link-contain">
                     <div>
@@ -220,6 +220,35 @@
                 <div class="quote-contain"></div>
                 <div class="to-do-block"></div>
             </div>
+        </div>
+        <div class="pomo-container">
+                <div class="pomo-todo-screen">
+                    <div class="pomo-clock">
+                        <div class="timer-btn-wrap">
+                            <button class="timer-btn pomodoro" data-time="1500">Pomodoro</button>
+                            <button class="timer-btn short-break" data-time="300">Short Break</button>
+                            <button class="timer-btn long-break" data-time="900">Long Break</button>
+                        </div>
+                        <div class="circle">
+                            <div class="inner-circle">
+                                <div class="countdown">
+                                    <h1></h1>
+                                    <p class="play-pause">Play</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="todo-board">
+
+                    </div>
+                </div>
+                <div class="bottom-menu">
+                    <div class="quote-contain">
+                    </div>
+                    <button id="return">
+                        <i class="fa-solid fa-arrow-right"></i> Return to Main Page
+                    </button>
+                </div>
         </div>
     </main>
     <script src="index.js" type="module"></script>

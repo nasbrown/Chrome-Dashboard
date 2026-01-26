@@ -13,7 +13,7 @@ body{
     image-rendering: pixelated;
     background-size: contain;
     background-position: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 1rem;
 }
 
@@ -96,6 +96,10 @@ h1{
     font-size: 1rem;
 }
 
+.link-contain a{
+    cursor: pointer;
+}
+
 #linkdiv-wrap{
     background-color: #464646;
 }
@@ -146,6 +150,84 @@ h1{
 .drop-shadow{
     filter: drop-shadow(0 0 5px #000000);
 }
+
+.hidden{
+    display: none;
+}
+
+/* Pomo page */
+
+#return{
+    background-color: transparent;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.pomo-todo-screen{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.timer-btn-wrap{
+    display: flex;
+    column-gap: .5rem;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.timer-btn{
+    padding: .5rem 1rem .5rem 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+.timer-btn:nth-child(1){
+    background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
+}
+
+.timer-btn:nth-child(2){
+    background: linear-gradient(90deg, #1CB5E0 0%, #000851 100%);
+}
+
+.timer-btn:nth-child(3){
+    background: linear-gradient(90deg, #9ebd13 0%, #008552 100%);
+}
+
+.circle{
+    width: 350px;
+    aspect-ratio: 1/1;
+    background-color: transparent;
+    border: 10px solid white;
+    border-radius: 50%;
+    position: relative;
+}
+
+.inner-circle{
+    border-radius: inherit;
+    inset: 2%;
+    width: 96%;
+    height: 96%;
+    position: absolute;
+}
+
+.countdown{
+    position: absolute;
+    inset: 0;
+    width: 94%;
+    height: 94%;
+    border-radius: inherit;
+    box-shadow: 14px 14px 25px #292929, -14px -14px 25px #434343;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 
 
 
