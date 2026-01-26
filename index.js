@@ -1,4 +1,5 @@
 import mql from 'https://esm.sh/@microlink/mql'
+import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
 
 //Links
 
@@ -12,6 +13,7 @@ document.addEventListener('submit', async (e) => {
         const linkDataArr = await getLinkArr(userInput)
 
         if(userInput !== ''){
+            console.log(linkDataArr)
             renderLink(linkDataArr)
             linkInput.value = ''
         } else{
@@ -20,14 +22,25 @@ document.addEventListener('submit', async (e) => {
     }
 })
 
+document.addEventListener('click', (e) => {
+    if(e.target.dataset.linkId){
+        mainLinkArr.deleteLink(e.target.dataset.linkId)
+    }
+})
+
 const getLinkHTML = (arr) => {
     return arr.map((web) => {
         return `
-            <div>
+        <div>
             <a class="link-flex" href="${web.linkName}" target="_blank">
-                <img width="32px" height="32px" src="${web.linkImg}">
-                <p>${web.linkTitle}</p>
+                <div>
+                    <img width="32px" height="32px" src="${web.linkImg}">
+                    <p>${web.linkTitle}</p>
+                </div>
             </a>
+            <button>
+                     <i data-link-id="${web.uuid}" class="fa-solid fa-x"></i>
+            </button>
         </div>
         `
     }).join('')
@@ -55,8 +68,6 @@ const getLinkTitle = async (website) => {
     try {
         const { data } = await mql(`${website}`)
 
-        console.log(data)
-
         return data.publisher
         
     } catch (error) {
@@ -77,19 +88,64 @@ const getLinkImage = async (website) => {
     }
 }
 
+const createLinkArr = () => {
+    let localStorsLinkArr = JSON.parse(localStorage.getItem('mainArrLink'))
+    let linkArr = []
+
+    if(!localStorsLinkArr){
+        localStorsLinkArr = linkArr
+        localStorage.setItem('mainArrLink', JSON.stringify(linkArr))
+    }
+
+    return {
+        newLink: function(link){
+            localStorsLinkArr.push(link)
+            localStorage.setItem('mainArrLink', JSON.stringify(localStorsLinkArr))
+        },
+        getLinks: function(){
+            return localStorsLinkArr
+        },
+        deleteLink: function(link) {
+            let revisedLinkArr = localStorsLinkArr.filter((website) => {
+                if(link === website.uuid){
+                    console.log(link)
+                    return false
+                }
+
+                return true
+            })
+
+            console.log(revisedLinkArr)
+
+            localStorage.setItem('mainArrLink', JSON.stringify([...revisedLinkArr]))
+            renderLink([...revisedLinkArr])
+        }
+    }
+}
+
+const mainLinkArr = createLinkArr()
+
 const getLinkArr = async (website) => {
     const title = await getLinkTitle(website)
     const image = await getLinkImage(website)
 
-    let linkArr = []
-
-    linkArr.unshift({
+    mainLinkArr.newLink({
         linkTitle: title,
         linkImg: image,
         linkName: website,
+        uuid: uuidv4(),
     })
 
-    return linkArr
+    console.log(mainLinkArr.newLink({
+        linkTitle: title,
+        linkImg: image,
+        linkName: website,
+        uuid: uuidv4(),
+    }))
+
+    console.log(mainLinkArr.getLinks())
+
+    return mainLinkArr.getLinks()
 }
 
 
@@ -97,6 +153,8 @@ const renderLink = (arr = []) => {
     const linkDivWrap = document.getElementById('linkdiv-wrap')
     return linkDivWrap.innerHTML = getLinkHTML(arr)
 }
+
+renderLink(mainLinkArr.getLinks())
 
 //Clock
 

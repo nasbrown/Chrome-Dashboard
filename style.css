@@ -73,20 +73,55 @@ h1{
 .link-flex{
     display: flex;
     flex-direction: row;
-    column-gap: .5rem;
     background-color: #464646;
-    padding: .5rem;
+    padding: 1rem .5rem .5rem .5rem;
+    padding-top: 1rem;
     align-items: center;
+    justify-content: space-between;
     text-decoration: none;
+}
+
+.link-flex div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: .5rem;
+}
+
+.link-flex button i:hover{
+    color: red;
 }
 
 .link-flex p{
     font-size: 1rem;
 }
 
+#linkdiv-wrap{
+    background-color: #464646;
+}
+
+#linkdiv-wrap div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#linkdiv-wrap div button{
+    background-color: transparent;
+    border: none;
+}
+
+#linkdiv-wrap div button i:hover{
+    color: red;
+}
+
 .triangle{
-    display: block;
-    transition-delay: 0ms;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 0 24px 32px 24px;
+  border-color: transparent transparent #464646 transparent;
+  transform: rotate(0deg);
 }
 
 #link-form{
