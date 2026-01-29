@@ -40,7 +40,31 @@ document.addEventListener('click', (e) => {
 
 //Pomodoro Timer
 
-//Using a simpler method
+const pomoMethods = () => {
+    return {
+        mainPomo: {
+            time: 25,
+            count: 0,
+        },
+        shortPomo: {
+            time: 5
+        },
+        longPomo: {
+            time: 15
+        },
+    }
+}
+
+const pomodoro = pomoMethods()
+
+const startDisplay = (time) => {
+    const countDown = document.querySelector('.countdown h1')
+    const seconds = `0`
+
+    countDown.textContent = `${time}:${seconds < 10 ? '0' : ''}${seconds}`
+}
+
+startDisplay(pomodoro.mainPomo.time)
 
 //Link component
 
