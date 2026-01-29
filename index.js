@@ -74,7 +74,11 @@ const pomoMethods = () => {
     return {
         mainPomoTime: {
             time: 1500,
-            color: {background: "rgb(255, 146, 172)", border: "rgb(149, 9, 41)"}
+            color: {background: "rgb(255, 146, 172)", border: "rgb(149, 9, 41)"},
+            count: function(){
+                let count = 0
+                return count++
+            }
         },
         shortPomoTime: {
             time: 300,
@@ -163,7 +167,7 @@ const handleTimerEnd = () => {
         pomoDoro.countD = pomoDoro.mainPomoTime.time
         pomoDoro.timerPaused = true
         playPause.textContent = 'Play'
-    }, 5000)
+    }, 1000)
 }
 
 const updateTimer = (timeInSeconds) => {
@@ -195,8 +199,15 @@ const resetTimer = (duration) => {
 
     playPause.textContent = 'Play'
 
+    pomoDoroCount()
+
     //Update the colors
 
+}
+
+const pomoCount = () => {
+    const pomoDoroCount = document.getElementById('num-of-pd')
+    pomoDoroCount.textContent = `# ${pomoDoro.mainPomoTime.count()}`
 }
 
 const changeTimer = (time) => {
