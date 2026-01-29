@@ -35,42 +35,82 @@ document.addEventListener('click', (e) => {
     else if(e.target.id === 'return'){
         pomoDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
-    } else if(e.target.dataset.time === '1500'){
-        startDisplay(pomodoro.mainPomo.time)
+    } else if(e.target.id === 'play-pause'){
+        //
     }
 })
 
 //Pomodoro Timer
 
 const pomoMethods = () => {
+
+    let countDown = 0
+    let endTime = Date.now() + countDown * 1000
+    let currentDuration = 1
+    let pausedTimeRemaining = 1
+
     return {
         mainPomo: {
-            time: 25,
+            time: 1500,
             count: 0,
         },
         shortPomo: {
-            time: 5
+            time: 300
         },
         longPomo: {
-            time: 15
+            time: 900
         },
+        isTimerPaused: true,
+        isTimerActive: false,
+        buttonStart: new Audio('sounds/select-button.mp3'),
+        alarmBell: new Audio('sounds/yeat-bell-sound.mp3'),
+        timer: function(){
+            setInterval(() => {
+                if(!this.isTimerPaused){
+                    const currentTime = Date.now()
+                    const remainingTime = Math.ceil((endTime - currentTime)/1000)
+
+                    if(remainingTime <= 0){
+                        clearInterval(this.timer())
+                        endofTime()
+                        return
+                    }
+
+                    countDown = remainingTime
+                    updateTimer(countDown)
+
+                    const progress = (countDown/currentDuration) * 360
+                    //Update inner circle
+                }
+            }, 1000)
+        },
+        activePomoDoro: function(){
+
+        }
     }
 }
 
 const pomodoro = pomoMethods()
 
-const startDisplay = (time) => {
-    let timer = setInterval(() => {
-         const countDown = document.querySelector('.countdown h1')
-    let minutes = parseInt(time / 60)
-    let seconds = parseInt(time % 60)
+const updateTimer = (timeInSeconds) => {
+    const minutes = Math.floor(timeInSeconds / 60)
+    const seconds = Math.floor(timeInSeconds % 60)
 
-    minutes = minutes < 10 ? '0' : minutes
-    seconds = seconds < 10 ? '0' : seconds
+    const countDownHeader = document.querySelector('.countdown h1')
 
-    countDown.textContent = `${minutes}:${seconds}`
-    }, 1000)
-    return timer
+    countDownHeader.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+}
+
+const startTimer = () => {
+    if(!pomodoro.isTimerActive){
+        pomodoro.isTimerActive = true
+
+        pomodoro.timer()
+    }
+}
+
+const endofTime = () => {
+
 }
 
 //Link component
