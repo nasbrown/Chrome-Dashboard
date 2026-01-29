@@ -199,7 +199,7 @@ const resetTimer = (duration) => {
 
     playPause.textContent = 'Play'
 
-    pomoDoroCount()
+    pomoCount()
 
     //Update the colors
 
