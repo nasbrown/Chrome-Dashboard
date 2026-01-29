@@ -53,6 +53,13 @@ document.addEventListener('click', (e) => {
         mainDash.classList.toggle('hidden')
     } else if(e.target.id === `play-pause`){
         pomoDoro.activePomo()
+    } else if(e.target.dataset.time === '1500'){
+        //changeTimer()
+        console.log('1500')
+    } else if(e.target.dataset.time === '900'){
+         console.log('900')
+    } else if(e.target.dataset.time === '300'){
+         console.log('300')
     }
 })
 
