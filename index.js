@@ -54,14 +54,11 @@ document.addEventListener('click', (e) => {
     } else if(e.target.id === `play-pause`){
         pomoDoro.activePomo()
     } else if(e.target.dataset.time === '1500'){
-        changeTimer(1500)
-        pomoDoro.ptr = 1500
+        changeTimer(pomoDoro.mainPomoTime.time)
     } else if(e.target.dataset.time === '900'){
-        changeTimer(900)
-        pomoDoro.ptr = 900
+        changeTimer(pomoDoro.longPomoTime.time)
     } else if(e.target.dataset.time === '300'){
-        changeTimer(300)
-        pomoDoro.ptr = 300
+        changeTimer(pomoDoro.shortPomoTime.time)
     }
 })
 
@@ -204,6 +201,7 @@ const resetTimer = (duration) => {
 
 const changeTimer = (time) => {
     updateTimer(time)
+    pomoDoro.ptr = time
 }
 
 resetTimer(pomoDoro.mainPomoTime.time)
