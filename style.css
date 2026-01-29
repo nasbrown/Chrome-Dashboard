@@ -233,6 +233,10 @@ h1{
     cursor: pointer;
 }
 
+button:disabled{
+    background-color: grey;
+}
+
 
 
 
