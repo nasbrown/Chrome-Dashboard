@@ -55,7 +55,6 @@ document.addEventListener('click', (e) => {
         pomoDoro.activePomo()
     } else if(e.target.dataset.time === '1500'){
         changeTimer(pomoDoro.mainPomoTime.time)
-        pomoCount()
     } else if(e.target.dataset.time === '900'){
         changeTimer(pomoDoro.longPomoTime.time)
     } else if(e.target.dataset.time === '300'){
@@ -71,7 +70,7 @@ const pomoMethods = () => {
     let endTime = Date.now() + countDown * 1000
     let currentDuration 
     let pausedTimeRemaining = 1500
-    let count = 0
+    let count = 1
     
     return {
         mainPomoTime: {
@@ -120,6 +119,10 @@ const pomoMethods = () => {
         },
         ptr: pausedTimeRemaining,
         activePomo: function(){
+
+            if(this.ptr = 1500){
+                pomoCount()
+            }
 
             this.buttonSound.play()
 
@@ -199,8 +202,6 @@ const resetTimer = (duration) => {
     playPause.style.display = 'block'
 
     playPause.textContent = 'Play'
-
-    pomoCount()
 
     //Update the colors
 
