@@ -189,17 +189,21 @@ h1{
     background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
 }
 
+/*
 .timer-btn:nth-child(2){
     background: linear-gradient(90deg, #1CB5E0 0%, #000851 100%);
 }
+*/
+
 
 .timer-btn:nth-child(2):disabled{
     background-color: grey;
-}
+} 
 
+/*
 .timer-btn:nth-child(3){
     background: linear-gradient(90deg, #9ebd13 0%, #008552 100%);
-}
+} */
 
 .timer-btn:nth-child(3):disabled{
     background-color: grey;
