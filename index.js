@@ -70,13 +70,13 @@ const pomoMethods = () => {
     let endTime = Date.now() + countDown * 1000
     let currentDuration 
     let pausedTimeRemaining = 1500
+    let count = 0
     
     return {
         mainPomoTime: {
             time: 1500,
             color: {background: "rgb(255, 146, 172)", border: "rgb(149, 9, 41)"},
             count: function(){
-                let count = 0
                 return count++
             }
         },
