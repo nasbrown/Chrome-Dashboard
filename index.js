@@ -1,5 +1,21 @@
-import mql from 'https://esm.sh/@microlink/mql'
+//import mql from 'https://esm.sh/@microlink/mql'
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+
+const loadModule = async () => {
+
+    try{
+        const microLink = await import('https://esm.sh/@microlink/mql')
+        if(!microLink.ok){
+           throw new Error(`Response status: ${microLink.status}`)
+        }
+        return console.log(microlink)
+    } catch(error){
+        console.error(`Error status: `, error)
+        return
+    }
+}
+
+loadModule()
 
 //Event Listeners for Link components, etc.
 
