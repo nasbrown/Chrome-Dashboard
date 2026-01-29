@@ -35,7 +35,9 @@ document.addEventListener('click', (e) => {
     else if(e.target.id === 'return'){
         pomoDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
-    } 
+    } else if(e.target.dataset.time === '1500'){
+        startDisplay(pomodoro.mainPomo.time)
+    }
 })
 
 //Pomodoro Timer
@@ -58,13 +60,18 @@ const pomoMethods = () => {
 const pomodoro = pomoMethods()
 
 const startDisplay = (time) => {
-    const countDown = document.querySelector('.countdown h1')
-    const seconds = `0`
+    let timer = setInterval(() => {
+         const countDown = document.querySelector('.countdown h1')
+    let minutes = parseInt(time / 60)
+    let seconds = parseInt(time % 60)
 
-    countDown.textContent = `${time}:${seconds < 10 ? '0' : ''}${seconds}`
+    minutes = minutes < 10 ? '0' : minutes
+    seconds = seconds < 10 ? '0' : seconds
+
+    countDown.textContent = `${minutes}:${seconds}`
+    }, 1000)
+    return timer
 }
-
-startDisplay(pomodoro.mainPomo.time)
 
 //Link component
 
