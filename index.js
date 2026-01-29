@@ -120,10 +120,6 @@ const pomoMethods = () => {
         ptr: pausedTimeRemaining,
         activePomo: function(){
 
-            if(this.ptr = 1500){
-                pomoCount()
-            }
-
             this.buttonSound.play()
 
             this.timerPaused = !this.timerPaused
@@ -132,6 +128,9 @@ const pomoMethods = () => {
             playPause.textContent = this.timerPaused ? 'Play' : 'Pause'
 
             if(this.timerPaused) {
+                if(this.ptr = 1500){
+                pomoCount()
+            }
                 this.ptr = Math.ceil((this.endTime - Date.now())/1000)
             } 
             else{
