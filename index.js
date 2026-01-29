@@ -55,10 +55,13 @@ document.addEventListener('click', (e) => {
         pomoDoro.activePomo()
     } else if(e.target.dataset.time === '1500'){
         changeTimer(1500)
+        pomoDoro.ptr = 1500
     } else if(e.target.dataset.time === '900'){
         changeTimer(900)
+        pomoDoro.ptr = 900
     } else if(e.target.dataset.time === '300'){
         changeTimer(300)
+        pomoDoro.ptr = 300
     }
 })
 
