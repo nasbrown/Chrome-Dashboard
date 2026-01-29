@@ -55,7 +55,7 @@ document.addEventListener('click', (e) => {
         pomoDoro.activePomo()
     } else if(e.target.dataset.time === '1500'){
         //changeTimer()
-        console.log('1500')
+        console.log(e.target.dataset.time === '1500')
     } else if(e.target.dataset.time === '900'){
          console.log('900')
     } else if(e.target.dataset.time === '300'){
