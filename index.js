@@ -190,6 +190,8 @@ const resetTimer = (duration) => {
 
     pomoDoro.currentDur = duration
 
+    pomoDoro.ptr = duration
+
     updateTimer(duration)
 
     playPause.style.display = 'block'
