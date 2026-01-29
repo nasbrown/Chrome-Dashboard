@@ -54,12 +54,11 @@ document.addEventListener('click', (e) => {
     } else if(e.target.id === `play-pause`){
         pomoDoro.activePomo()
     } else if(e.target.dataset.time === '1500'){
-        //changeTimer()
-        console.log(e.target.dataset.time === '1500')
+        changeTimer(1500)
     } else if(e.target.dataset.time === '900'){
-         console.log('900')
+        changeTimer(900)
     } else if(e.target.dataset.time === '300'){
-         console.log('300')
+        changeTimer(300)
     }
 })
 
@@ -196,6 +195,10 @@ const resetTimer = (duration) => {
 
     //Update the colors
 
+}
+
+const changeTimer = (time) => {
+    updateTimer(time)
 }
 
 resetTimer(pomoDoro.mainPomoTime.time)
