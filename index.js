@@ -8,7 +8,7 @@ const loadModule = async () => {
         if(!microLink.ok){
            throw new Error(`Response status: ${microLink.status}`)
         }
-        return console.log(microlink)
+        return microLink
     } catch(error){
         console.error(`Error status: `, error)
         return
@@ -29,7 +29,6 @@ document.addEventListener('submit', async (e) => {
         const linkDataArr = await getLinkArr(userInput)
 
         if(userInput !== ''){
-            console.log(linkDataArr)
             renderLink(linkDataArr)
             linkInput.value = ''
         } else{
