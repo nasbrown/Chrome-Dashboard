@@ -1,5 +1,24 @@
-import mql from 'https://esm.sh/@microlink/mql'
+//import mql from 'https://esm.sh/@microlink/mql'
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+
+const loadMQLResource = async () => {
+    
+    try {
+        const res = await import('https://esm.sh/@microlink/mql')
+
+        if(!res.ok){
+            throw new Error(`Response status: ${res.status}`)
+        }
+
+        const mql = res.mql
+
+        return mql
+    } catch (error) {
+        console.error(`Error status: `, error)
+    }
+}
+
+loadMQLResource()
 
 //Event Listeners for Link components, etc.
 
@@ -36,7 +55,7 @@ document.addEventListener('click', (e) => {
         pomoDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
     } else if(e.target.id === 'play-pause'){
-        //
+        pomodoro.activePomoDoro()
     }
 })
 
@@ -85,7 +104,11 @@ const pomoMethods = () => {
             }, 1000)
         },
         activePomoDoro: function(){
+            const playPause = document.getElementById('play-pause')
 
+            this.isTimerPaused = !this.isTimerPaused
+
+            playPause.textContent = 'Play'
         }
     }
 }
