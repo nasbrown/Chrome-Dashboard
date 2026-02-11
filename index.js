@@ -10,7 +10,7 @@ const loadMQLResource = async () => {
             throw new Error(`Response status: ${res.status}`)
         }
 
-        const mql = res.mql
+        const mql = await res.mql
 
         return mql
     } catch (error) {
@@ -54,8 +54,15 @@ document.addEventListener('click', (e) => {
     else if(e.target.id === 'return'){
         pomoDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
+
     } else if(e.target.id === 'play-pause'){
-        pomodoro.activePomoDoro()
+        pomoDoro.activePomo()
+    } else if(e.target.dataset.time === '1500'){
+        changeTimer(pomoDoro.mainPomoTime.time)
+    } else if(e.target.dataset.time === '900'){
+        changeTimer(pomoDoro.longPomoTime.time)
+    } else if(e.target.dataset.time === '300'){
+        changeTimer(pomoDoro.shortPomoTime.time)
     }
 })
 
@@ -63,78 +70,155 @@ document.addEventListener('click', (e) => {
 
 const pomoMethods = () => {
 
-    let countDown = 0
+    let countDown
     let endTime = Date.now() + countDown * 1000
-    let currentDuration = 1
-    let pausedTimeRemaining = 1
-
+    let currentDuration 
+    let pausedTimeRemaining = 1500
+    
     return {
-        mainPomo: {
+        mainPomoTime: {
             time: 1500,
-            count: 0,
+            color: {background: "rgb(255, 146, 172)", border: "rgb(149, 9, 41)"},
         },
-        shortPomo: {
-            time: 300
+        shortPomoTime: {
+            time: 300,
+            color: {background: "rgb(187, 255, 179)", border: "rgb(10, 97, 84)"}
         },
-        longPomo: {
-            time: 900
+        longPomoTime: {
+            time: 900,
+            color: {background: "rgb(134, 140, 255)", border: "rgb(19, 27, 175)"}
         },
-        isTimerPaused: true,
-        isTimerActive: false,
-        buttonStart: new Audio('sounds/select-button.mp3'),
-        alarmBell: new Audio('sounds/yeat-bell-sound.mp3'),
+        buttonSound: new Audio('sounds/select-button.mp3'),
+        bellSound: new Audio('sounds/yeat-bell-sound.mp3'),
+        backgroundMusic: new Audio('sounds/hip_hop_mario.mp3'),
+        pomoCompletion: new Audio('sounds/anotherone.mp3'),
+        timerStarted: false,
+        timerPaused: true,
+        endTime: endTime,
+        countD: countDown,
+        currentDur: currentDuration,
         timer: function(){
             setInterval(() => {
-                if(!this.isTimerPaused){
-                    const currentTime = Date.now()
-                    const remainingTime = Math.ceil((endTime - currentTime)/1000)
+            if(!this.timerPaused){
+                const currentTime = Date.now()
+                const remainingTime = Math.ceil((this.endTime - currentTime)/1000)
 
-                    if(remainingTime <= 0){
-                        clearInterval(this.timer())
-                        endofTime()
-                        return
-                    }
-
-                    countDown = remainingTime
-                    updateTimer(countDown)
-
-                    const progress = (countDown/currentDuration) * 360
-                    //Update inner circle
+                if(remainingTime <= 0){
+                    clearInterval(this.timer())
+                    handleTimerEnd()
+                    return
                 }
-            }, 1000)
+
+                this.countD = remainingTime
+                updateTimer(this.countD)
+
+                const progress = (this.countD/this.currentDur) * 360
+                //function to update time circle
+            }
+        }, 1000)
         },
-        activePomoDoro: function(){
+        ptr: pausedTimeRemaining,
+        activePomo: function(){
+
+            this.buttonSound.play()
+
+            this.timerPaused = !this.timerPaused
+
             const playPause = document.getElementById('play-pause')
 
-            this.isTimerPaused = !this.isTimerPaused
+            if(this.timerPaused) {
+                playPause.textContent = 'Play'
+                this.ptr = Math.ceil((this.endTime - Date.now())/1000)
+            } 
+            else{
+                playPause.textContent = 'Pause'
+                this.endTime = Date.now() + this.ptr * 1000
+            }
 
-            playPause.textContent = 'Play'
-        }
+            if(!this.timerStarted){
+                startTimer()
+            }
+        },
     }
 }
 
-const pomodoro = pomoMethods()
+const pomoDoro = pomoMethods()
+
+const startTimer = () => {
+
+    if(!pomoDoro.timerStarted){
+        pomoDoro.timerStarted = true
+
+        pomoDoro.timer()
+    }
+}
+
+const handleTimerEnd = () => {
+    pomoDoro.countD = 0
+    const playPause = document.getElementById('play-pause')
+    playPause.style.display = 'none'
+
+    pomoDoro.bellSound.play()
+    updateTimer(0)
+    
+    //Update the circle
+
+    setTimeout(() => {
+        resetTimer(pomoDoro.mainPomoTime.time)
+        pomoDoro.currentDur = pomoDoro.mainPomoTime.time
+        pomoDoro.countD = pomoDoro.mainPomoTime.time
+        pomoDoro.timerPaused = true
+        playPause.textContent = 'Play'
+    }, 1000)
+}
 
 const updateTimer = (timeInSeconds) => {
     const minutes = Math.floor(timeInSeconds / 60)
-    const seconds = Math.floor(timeInSeconds % 60)
+    const seconds = timeInSeconds % 60
 
-    const countDownHeader = document.querySelector('.countdown h1')
-
-    countDownHeader.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+    const pomoTimeDisplay = document.querySelector('.countdown h1')
+    pomoTimeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
 }
 
-const startTimer = () => {
-    if(!pomodoro.isTimerActive){
-        pomodoro.isTimerActive = true
+const resetTimer = (duration) => {
+    const playPause = document.getElementById('play-pause')
+    
+    clearInterval(pomoDoro.timer())
 
-        pomodoro.timer()
-    }
+    pomoDoro.timerStarted = false
+
+    pomoDoro.timerPaused = true
+
+    pomoDoro.countD = duration
+
+    pomoDoro.currentDur = duration
+
+    pomoDoro.ptr = duration
+
+    updateTimer(duration)
+
+    playPause.style.display = 'block'
+
+    playPause.textContent = 'Play'
+
+    //Update the colors
+
 }
 
-const endofTime = () => {
-
+const pomoCount = () => {
+    const pomoDoroCount = document.getElementById('num-of-pd')
+    pomoDoroCount.textContent = `# 1`
 }
+
+const changeTimer = (time) => {
+    updateTimer(time)
+    pomoDoro.ptr = time
+}
+
+pomoCount()
+
+resetTimer(10)
+
 
 //Link component
 
