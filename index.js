@@ -1,24 +1,6 @@
-//import mql from 'https://esm.sh/@microlink/mql'
+import mql from 'https://esm.sh/@microlink/mql'
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
 
-const loadMQLResource = async () => {
-    
-    try {
-        const res = await import('https://esm.sh/@microlink/mql')
-
-        if(!res.ok){
-            throw new Error(`Response status: ${res.status}`)
-        }
-
-        const mql = await res.mql
-
-        return mql
-    } catch (error) {
-        console.error(`Error status: `, error)
-    }
-}
-
-loadMQLResource()
 
 //Event Listeners for Link components, etc.
 
@@ -74,6 +56,7 @@ const pomoMethods = () => {
     let endTime = Date.now() + countDown * 1000
     let currentDuration 
     let pausedTimeRemaining = 1500
+    let intervalId = null
     
     return {
         mainPomoTime: {
@@ -96,16 +79,23 @@ const pomoMethods = () => {
         timerPaused: true,
         endTime: endTime,
         countD: countDown,
+        count: 1,
+        cycleCount: 1,
         currentDur: currentDuration,
         timer: function(){
-            setInterval(() => {
+            if(intervalId !== null){
+                return
+            }
+            intervalId = setInterval(() => {
             if(!this.timerPaused){
                 const currentTime = Date.now()
                 const remainingTime = Math.ceil((this.endTime - currentTime)/1000)
 
                 if(remainingTime <= 0){
-                    clearInterval(this.timer())
+                    clearInterval(intervalId)
+                    intervalId = null
                     handleTimerEnd()
+                    this.cycleCount++
                     return
                 }
 
@@ -164,20 +154,45 @@ const handleTimerEnd = () => {
     //Update the circle
 
     setTimeout(() => {
+       const changeDisplay = pomoDoro.cycleCount % 8
+
+       const pomoDoroCount = document.getElementById('num-of-pd')
+
+    if(changeDisplay === 0){
+        resetTimer(pomoDoro.longPomoTime.time)
+        pomoDoro.currentDur = pomoDoro.longPomoTime.time
+        pomoDoro.countD = pomoDoro.longPomoTime.time
+        pomoDoro.timerPaused = true
+        playPause.textContent = 'Play'
+    }
+
+    else if(changeDisplay % 2 === 0){
+        resetTimer(pomoDoro.shortPomoTime.time)
+        pomoDoro.currentDur = pomoDoro.shortPomoTime.time
+        pomoDoro.countD = pomoDoro.shortPomoTime.time
+        pomoDoro.timerPaused = true
+        playPause.textContent = 'Play'
+    } else {
         resetTimer(pomoDoro.mainPomoTime.time)
         pomoDoro.currentDur = pomoDoro.mainPomoTime.time
         pomoDoro.countD = pomoDoro.mainPomoTime.time
         pomoDoro.timerPaused = true
         playPause.textContent = 'Play'
+        pomoDoro.count++
+        pomoDoroCount.textContent = `#${pomoDoro.count}`
+        }
     }, 1000)
 }
 
 const updateTimer = (timeInSeconds) => {
-    const minutes = Math.floor(timeInSeconds / 60)
-    const seconds = timeInSeconds % 60
+    let minutes = Math.floor(timeInSeconds / 60)
+    let seconds = timeInSeconds % 60
+
+    minutes = minutes.toString().padStart(2, '0');
+    seconds = seconds.toString().padStart(2, '0');
 
     const pomoTimeDisplay = document.querySelector('.countdown h1')
-    pomoTimeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+    pomoTimeDisplay.textContent = `${minutes}:${seconds}`
 }
 
 const resetTimer = (duration) => {
@@ -205,9 +220,9 @@ const resetTimer = (duration) => {
 
 }
 
-const pomoCount = () => {
+const initialCount = (count = 1) => {
     const pomoDoroCount = document.getElementById('num-of-pd')
-    pomoDoroCount.textContent = `# 1`
+    pomoDoroCount.textContent = `# ${count}`
 }
 
 const changeTimer = (time) => {
@@ -215,9 +230,9 @@ const changeTimer = (time) => {
     pomoDoro.ptr = time
 }
 
-pomoCount()
+initialCount()
 
-resetTimer(10)
+resetTimer(pomoDoro.mainPomoTime.time)
 
 
 //Link component
