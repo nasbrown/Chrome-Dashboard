@@ -212,8 +212,6 @@ h1{
 .circle{
     width: 350px;
     aspect-ratio: 1/1;
-    background-color: transparent;
-    border: 10px solid white;
     border-radius: 50%;
     position: relative;
 }
@@ -222,6 +220,8 @@ h1{
     border-radius: inherit;
     inset: 2%;
     width: 96%;
+    mask: radial-gradient(farthest-side, transparent 92%, black 91%);
+    transition: all .1s linear;
     height: 96%;
     position: absolute;
 }
@@ -233,7 +233,16 @@ h1{
     height: 94%;
     border-radius: inherit;
     box-shadow: 14px 14px 25px #292929, -14px -14px 25px #434343;
+    background-color: transparent;
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.countdown-wrap{
+    z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;

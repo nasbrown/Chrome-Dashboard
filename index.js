@@ -103,6 +103,7 @@ const pomoMethods = () => {
                 updateTimer(this.countD)
 
                 const progress = (this.countD/this.currentDur) * 360
+                updateCircle(progress)
                 //function to update time circle
             }
         }, 1000)
@@ -141,6 +142,11 @@ const startTimer = () => {
 
         pomoDoro.timer()
     }
+}
+
+const updateCircle = (degree) => {
+    const innerCircle = document.querySelector('.inner-circle')
+    innerCircle.style.background = `conic-gradient(white ${degree}deg, transparent 0%)`
 }
 
 const handleTimerEnd = () => {
@@ -232,7 +238,7 @@ const changeTimer = (time) => {
 
 initialCount()
 
-resetTimer(pomoDoro.mainPomoTime.time)
+resetTimer(5)
 
 
 //Link component
