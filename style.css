@@ -185,29 +185,29 @@ h1{
     cursor: pointer;
 }
 
-.timer-btn:nth-child(1){
+#pdoro{
     background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
 }
-
-/*
-.timer-btn:nth-child(2){
-    background: linear-gradient(90deg, #1CB5E0 0%, #000851 100%);
-}
-*/
-
-
-.timer-btn:nth-child(2):disabled{
-    background-color: grey;
+ 
+#pdoro:disabled{
+    background: grey;
 } 
 
-/*
-.timer-btn:nth-child(3){
-    background: linear-gradient(90deg, #9ebd13 0%, #008552 100%);
-} */
-
-.timer-btn:nth-child(3):disabled{
-    background-color: grey;
+#s-break{
+    background: linear-gradient(90deg, #1CB5E0 0%, #000851 100%);
 }
+
+#s-break:disabled{
+    background: grey;
+}  
+
+#l-break{
+    background: linear-gradient(90deg, #9ebd13 0%, #008552 100%);
+} 
+
+#l-break:disabled{
+    background: grey;
+} 
 
 .circle{
     width: 350px;
@@ -216,11 +216,12 @@ h1{
     position: relative;
 }
 
+/* mask: radial-gradient(farthest-side, transparent 92%, black 91%); */
+
 .inner-circle{
     border-radius: inherit;
     inset: 2%;
     width: 96%;
-    mask: radial-gradient(farthest-side, transparent 92%, black 91%);
     transition: all .1s linear;
     height: 96%;
     position: absolute;
@@ -229,20 +230,12 @@ h1{
 .countdown{
     position: absolute;
     inset: 0;
-    width: 94%;
-    height: 94%;
+    width: 90%;
+    height: 90%;
     border-radius: inherit;
     box-shadow: 14px 14px 25px #292929, -14px -14px 25px #434343;
-    background-color: transparent;
+    background-color: black;
     margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.countdown-wrap{
-    z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -251,7 +244,13 @@ h1{
 
 #play-pause{
     font-weight: bold;
+    margin-bottom: .5rem;
+    font-size: 1.25rem;
     cursor: pointer;
+}
+
+#num-of-pd{
+    font-size: 1rem;
 }
 
 

@@ -39,16 +39,10 @@ document.addEventListener('click', (e) => {
 
     } else if(e.target.id === 'play-pause'){
         pomoDoro.activePomo()
-    } else if(e.target.dataset.time === '1500'){
-        changeTimer(pomoDoro.mainPomoTime.time)
-    } else if(e.target.dataset.time === '900'){
-        changeTimer(pomoDoro.longPomoTime.time)
-    } else if(e.target.dataset.time === '300'){
-        changeTimer(pomoDoro.shortPomoTime.time)
     }
 })
 
-//Pomodoro Timer
+//Pomodoro Timer Component
 
 const pomoMethods = () => {
 
@@ -56,25 +50,25 @@ const pomoMethods = () => {
     let endTime = Date.now() + countDown * 1000
     let currentDuration 
     let pausedTimeRemaining = 1500
-    let intervalId = null
+    let timerId = null
     
     return {
         mainPomoTime: {
             time: 1500,
-            color: {background: "rgb(255, 146, 172)", border: "rgb(149, 9, 41)"},
+            //color: {background: "rgb(255, 146, 172)", border: "rgb(149, 9, 41)"},
         },
         shortPomoTime: {
             time: 300,
-            color: {background: "rgb(187, 255, 179)", border: "rgb(10, 97, 84)"}
+            //color: {background: "rgb(187, 255, 179)", border: "rgb(10, 97, 84)"}
         },
         longPomoTime: {
             time: 900,
-            color: {background: "rgb(134, 140, 255)", border: "rgb(19, 27, 175)"}
+            //color: {background: "rgb(134, 140, 255)", border: "rgb(19, 27, 175)"}
         },
         buttonSound: new Audio('sounds/select-button.mp3'),
         bellSound: new Audio('sounds/yeat-bell-sound.mp3'),
-        backgroundMusic: new Audio('sounds/hip_hop_mario.mp3'),
-        pomoCompletion: new Audio('sounds/anotherone.mp3'),
+        //backgroundMusic: new Audio('sounds/hip_hop_mario.mp3'), for another time
+        //pomoCompletion: new Audio('sounds/anotherone.mp3'), for another time
         timerStarted: false,
         timerPaused: true,
         endTime: endTime,
@@ -83,17 +77,17 @@ const pomoMethods = () => {
         cycleCount: 1,
         currentDur: currentDuration,
         timer: function(){
-            if(intervalId !== null){
+            if(timerId !== null){
                 return
             }
-            intervalId = setInterval(() => {
+            timerId = setInterval(() => {
             if(!this.timerPaused){
                 const currentTime = Date.now()
                 const remainingTime = Math.ceil((this.endTime - currentTime)/1000)
 
                 if(remainingTime <= 0){
-                    clearInterval(intervalId)
-                    intervalId = null
+                    clearInterval(timerId)
+                    timerId = null
                     handleTimerEnd()
                     this.cycleCount++
                     return
@@ -104,7 +98,6 @@ const pomoMethods = () => {
 
                 const progress = (this.countD/this.currentDur) * 360
                 updateCircle(progress)
-                //function to update time circle
             }
         }, 1000)
         },
@@ -146,7 +139,7 @@ const startTimer = () => {
 
 const updateCircle = (degree) => {
     const innerCircle = document.querySelector('.inner-circle')
-    innerCircle.style.background = `conic-gradient(white ${degree}deg, transparent 0%)`
+    innerCircle.style.background = `conic-gradient(blue ${degree}deg, transparent 0%)`
 }
 
 const handleTimerEnd = () => {
@@ -155,14 +148,18 @@ const handleTimerEnd = () => {
     playPause.style.display = 'none'
 
     pomoDoro.bellSound.play()
+    
     updateTimer(0)
     
-    //Update the circle
+    updateCircle(0)
 
     setTimeout(() => {
        const changeDisplay = pomoDoro.cycleCount % 8
 
        const pomoDoroCount = document.getElementById('num-of-pd')
+       const longCountBtn = document.getElementById('l-break')
+       const shortCountBtn = document.getElementById('s-break')
+       const normalCountBtn = document.getElementById('pdoro')
 
     if(changeDisplay === 0){
         resetTimer(pomoDoro.longPomoTime.time)
@@ -170,6 +167,9 @@ const handleTimerEnd = () => {
         pomoDoro.countD = pomoDoro.longPomoTime.time
         pomoDoro.timerPaused = true
         playPause.textContent = 'Play'
+        longCountBtn.disabled = false
+        shortCountBtn.disabled = true
+        normalCountBtn.disabled = true
     }
 
     else if(changeDisplay % 2 === 0){
@@ -178,6 +178,9 @@ const handleTimerEnd = () => {
         pomoDoro.countD = pomoDoro.shortPomoTime.time
         pomoDoro.timerPaused = true
         playPause.textContent = 'Play'
+        longCountBtn.disabled = true
+        shortCountBtn.disabled = false
+        normalCountBtn.disabled = true
     } else {
         resetTimer(pomoDoro.mainPomoTime.time)
         pomoDoro.currentDur = pomoDoro.mainPomoTime.time
@@ -186,6 +189,9 @@ const handleTimerEnd = () => {
         playPause.textContent = 'Play'
         pomoDoro.count++
         pomoDoroCount.textContent = `#${pomoDoro.count}`
+        longCountBtn.disabled = true
+        shortCountBtn.disabled = true
+        normalCountBtn.disabled = false
         }
     }, 1000)
 }
@@ -222,7 +228,7 @@ const resetTimer = (duration) => {
 
     playPause.textContent = 'Play'
 
-    //Update the colors
+    //Update the colors(for another time)
 
 }
 
@@ -231,14 +237,16 @@ const initialCount = (count = 1) => {
     pomoDoroCount.textContent = `# ${count}`
 }
 
+/*
+Feature for another time
 const changeTimer = (time) => {
     updateTimer(time)
     pomoDoro.ptr = time
-}
+} */
 
 initialCount()
 
-resetTimer(5)
+resetTimer(pomoDoro.mainPomoTime.time)
 
 
 //Link component
