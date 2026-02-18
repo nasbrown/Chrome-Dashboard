@@ -205,6 +205,10 @@ const updateTimer = (timeInSeconds) => {
 
     const pomoTimeDisplay = document.querySelector('.countdown h1')
     pomoTimeDisplay.textContent = `${minutes}:${seconds}`
+    
+    if(pomoDoro.timerStarted){
+        document.title = `Timer: ${minutes}:${seconds}`
+    }
 }
 
 const resetTimer = (duration) => {
