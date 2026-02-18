@@ -26,21 +26,46 @@ document.addEventListener('click', (e) => {
 
     const mainDash = document.querySelector('.dash-container')
     const pomoDash = document.querySelector('.pomo-container')
+    const wordleDash = document.querySelector('.wordle-container')
     
     if(e.target.dataset.linkId){
         mainLinkArr.deleteLink(e.target.dataset.linkId)
     } else if(e.target.id === 'focus'){
         pomoDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
+       
     } 
-    else if(e.target.id === 'return'){
+    else if(e.target.id === 'return-pomo'){
         pomoDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
+
+    } else if(e.target.id === 'return-wordle'){
+        pomoDash.classList.toggle('hidden')
+        mainDash.classList.toggle('hidden')
+      
 
     } else if(e.target.id === 'play-pause'){
         pomoDoro.activePomo()
     }
 })
+
+//Wordle Component
+
+const wordleMethods = () => {
+    return {
+        keyboard: [
+            'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
+            'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'ENTER', ' ', `⌫`, 'SPACE'
+        ],
+        height: 6,
+        width: 5,
+        row: 0,
+        column: 0,
+        gameOver: false,
+    }
+}
+
+const wordle = wordleMethods()
 
 //Pomodoro Timer Component
 
@@ -205,7 +230,7 @@ const updateTimer = (timeInSeconds) => {
 
     const pomoTimeDisplay = document.querySelector('.countdown h1')
     pomoTimeDisplay.textContent = `${minutes}:${seconds}`
-    
+
     if(pomoDoro.timerStarted){
         document.title = `Timer: ${minutes}:${seconds}`
     }

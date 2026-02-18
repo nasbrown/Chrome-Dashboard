@@ -157,7 +157,7 @@ h1{
 
 /* Pomo page */
 
-#return{
+#return-pomo, #return-wordle{
     background-color: transparent;
     border: none;
     font-size: 1rem;
@@ -252,8 +252,76 @@ h1{
 #num-of-pd{
     font-size: 1rem;
 }
+/* Wordle Game */
 
+.wordle-container{
+    background: #464646;
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 1.5rem;
+}
 
+.wordle-menu{
+    display: flex;
+    column-gap: 2rem;
+    align-items: center;
+}
+
+.wordle-links{
+   display: flex;
+   column-gap: 2rem;
+   flex-direction: row;
+   align-items: center;
+   justify-content: center;
+}
+
+#question-mark{
+    margin-top: 1rem;
+}
+
+#settings{
+    margin-top: 1rem;
+}
+
+.wordle-links a{
+    fill: white;
+    cursor: pointer;
+    text-decoration: none;
+    transition: fill 3ms ease;
+}
+
+.wordle-links a svg:hover{
+    fill: #538D4E;
+}
+
+.wordle-menu p{
+    margin-top: .5rem;
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+#board{
+    border: black solid 2px;
+    width: 35%;
+    height: 420px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.wordle-box{
+    width: 60px;
+    height: 60px;
+    border: black solid 2px;
+    font-size: 2rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2.5px;
+}
 
 
 
