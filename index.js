@@ -8,6 +8,13 @@ import { wordleArrFive, wordleArrSix } from './wordle-data.js'
 
 document.addEventListener('DOMContentLoaded', (e) => {
     createWordleHtml()
+    createKeyBoardHtml(wordle.keyboard)
+})
+
+window.addEventListener('keydown', (e) => {
+    if(`Key + ${e.key.toLowerCase()}` === e.target.dataset.keyId){
+        console.log('hi')
+    }
 })
 
 document.addEventListener('submit', async (e) => {
@@ -48,10 +55,11 @@ document.addEventListener('click', (e) => {
     } else if(e.target.id === 'return-wordle'){
         pomoDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
-      
 
     } else if(e.target.id === 'play-pause'){
         pomoDoro.activePomo()
+    } else if(e.target.dataset.keyId){
+        console.log(e.target.dataset.keyId)
     }
 })
 
@@ -60,8 +68,9 @@ document.addEventListener('click', (e) => {
 const wordleMethods = () => {
     return {
         keyboard: [
-            'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
-            'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'ENTER', ' ', `⌫`, 'SPACE'
+           ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',], 
+             ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',],
+             ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', `⌫`,],
         ],
         height: 6,
         width: 5,
@@ -82,14 +91,42 @@ const chooseWordOfTheDay = (arr = ['Nasia', 'Louuu']) => {
 }
 
 const createWordleHtml = (length = 5) => {
-    for(let i = 0; i < 6; i++){
-        for(let n = 0; n < 5; n++){
+    for(let height = 0; height < 6; height++){
+        for(let row = 0; row < 5; row++){
             let tile = document.createElement('span')
-            tile.id = i.toString() + '-' + n.toString()
+            tile.id = height.toString() + '-' + row.toString()
             tile.classList.add('wordle-box')
             tile.innerText = ' '
             const wordleBoard = document.getElementById('board')
             wordleBoard.appendChild(tile)
+        }
+    }
+}
+
+const createKeyBoardHtml = (arr = []) => {
+    for(let i = 0; i < arr.length; i++){
+        let row = arr[i]
+        let keyboardRow = document.createElement('div')
+        keyboardRow.classList.add('k-row')
+        const wordleKeyRows = document.getElementById('keyboard')
+        wordleKeyRows.appendChild(keyboardRow)
+
+        for(let n = 0; n < row.length; n++){
+            let keys = document.createElement('button')
+            keys.dataset.keyId = row[n]
+            keys.classList.add('wordle-keys')
+            keys.innerText = row[n]
+            if(row[n] === 'ENTER'){
+                keys.dataset.keyId = 'Enter'
+            } else if(row[n] === '⌫'){
+                keys.dataset.keyId = 'Backspace'
+            } else if('A' <= row[n] && row[n] <= 'Z'){ //checks if a specific character is uppercase btw A and Z
+                keys.dataset.keyId = `Key` + row[n]
+            }
+            const wordleKeyBoard = document.querySelectorAll('.k-row')
+            wordleKeyBoard.forEach((key) => {
+                return key.appendChild(keys)
+            })
         }
     }
 }

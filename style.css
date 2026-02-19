@@ -308,8 +308,8 @@ h1{
     height: 420px;
     display: grid;
     grid-template-columns: auto auto auto auto auto;
-    column-gap: 1rem;
-    row-gap: .5rem;
+    column-gap: .25rem;
+    row-gap: .25rem;
 }
 
 .wordle-box{
@@ -321,6 +321,36 @@ h1{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#keyboard{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: .5rem;
+    row-gap: .25rem;
+    width: auto;
+    height: auto;
+}
+
+.k-row{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: .25rem;
+}
+
+.wordle-keys{
+    width: auto;
+    height: 70px;
+    padding: 1rem;
+    background-color:grey;
+    color: white;
+    cursor: pointer;
+    font-size: 2rem;
+    border: solid 1px black;
+    font-weight: bold;
 }
 
 
