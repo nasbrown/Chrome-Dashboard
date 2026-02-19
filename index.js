@@ -1,8 +1,14 @@
 import mql from 'https://esm.sh/@microlink/mql'
-import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
+import { wordleArrFive, wordleArrSix } from './wordle-data.js'
+//Dictionary API for the Wordle to implement --- https://dictionaryapi.dev/
 
 
 //Event Listeners for Link components, etc.
+
+document.addEventListener('DOMContentLoaded', (e) => {
+    createWordleHtml()
+})
 
 document.addEventListener('submit', async (e) => {
     if(e.target.id === 'link-form'){
@@ -59,6 +65,7 @@ const wordleMethods = () => {
         ],
         height: 6,
         width: 5,
+        sWidth: 6,
         row: 0,
         column: 0,
         gameOver: false,
@@ -66,6 +73,26 @@ const wordleMethods = () => {
 }
 
 const wordle = wordleMethods()
+
+const chooseWordOfTheDay = (arr = ['Nasia', 'Louuu']) => {
+
+    const getRandomWord = Math.floor(Math.random() * arr.length)
+
+    return arr[getRandomWord].toUpperCase()
+}
+
+const createWordleHtml = (length = 5) => {
+    for(let i = 0; i < 6; i++){
+        for(let n = 0; n < 5; n++){
+            let tile = document.createElement('span')
+            tile.id = i.toString() + '-' + n.toString()
+            tile.classList.add('wordle-box')
+            tile.innerText = ' '
+            const wordleBoard = document.getElementById('board')
+            wordleBoard.appendChild(tile)
+        }
+    }
+}
 
 //Pomodoro Timer Component
 
