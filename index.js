@@ -6,14 +6,28 @@ import { wordleArrFive, wordleArrSix } from './wordle-data.js'
 
 //Event Listeners for Link components, etc.
 
-document.addEventListener('DOMContentLoaded', (e) => {
+document.addEventListener('DOMContentLoaded', () => {
     createWordleHtml()
     createKeyBoardHtml(wordle.keyboard)
 })
 
-window.addEventListener('keydown', (e) => {
-    if(`Key + ${e.key.toLowerCase()}` === e.target.dataset.keyId){
-        console.log('hi')
+document.addEventListener('keydown', (e) => {
+    const wordleBox = document.querySelectorAll('.wordle-box')
+    const pressedKey = e.key
+    const isLetter = /^[a-zA-Z]$/.test(pressedKey)
+
+    if(isLetter){
+        if(wordle.geussWord && wordleBox[wordle.boxIndex - 1].id.includes('-4')){
+            console.log(wordle.boxIndex)
+            alert('Please press enter to input your guess')
+            return
+        } else{
+            updateTextViaKeyBoard(pressedKey)
+        }
+    } else if(pressedKey === 'Enter'){
+        someFunctionVerifyingAnswer()
+    } else if(pressedKey === `Backspace`){
+        updateTextViaKeyBoard(pressedKey)
     }
 })
 
@@ -59,13 +73,14 @@ document.addEventListener('click', (e) => {
     } else if(e.target.id === 'play-pause'){
         pomoDoro.activePomo()
     } else if(e.target.dataset.keyId){
-        console.log(e.target.dataset.keyId)
+        updateTextViaDiv(e.target.dataset.keyId)
     }
 })
 
 //Wordle Component
 
 const wordleMethods = () => {
+
     return {
         keyboard: [
            ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',], 
@@ -78,6 +93,11 @@ const wordleMethods = () => {
         row: 0,
         column: 0,
         gameOver: false,
+        geussWord: false,
+        wordleNumCount: 1,
+        boxIndex: 0,
+        newWord: [],
+        testWord: 'UUUUU',
     }
 }
 
@@ -88,6 +108,59 @@ const chooseWordOfTheDay = (arr = ['Nasia', 'Louuu']) => {
     const getRandomWord = Math.floor(Math.random() * arr.length)
 
     return arr[getRandomWord].toUpperCase()
+}
+
+const someFunctionVerifyingAnswer = (key) => {
+    let fullString = wordle.newWord.join('')
+    if(fullString === wordle.testWord){
+        wordle.geussWord = false
+        wordle.newWord.length = 0
+        alert('Correct!')
+    } else{
+        alert('Try again!')
+    }
+}
+
+const updateTextViaKeyBoard = (keyId) => {
+    const wordleBox = document.querySelectorAll('.wordle-box')
+    let key = `${keyId}`
+    let newString = key.toUpperCase()
+
+    if(key === `Backspace`){
+        wordleBox[wordle.boxIndex - 1].textContent = ``
+        wordle.newWord.pop(newString)
+        console.log(wordle.newWord)
+        console.log(wordleBox[wordle.boxIndex-1].id)
+        wordle.boxIndex--
+        wordle.wordleNumCount--
+    }
+     else{
+        wordleBox[wordle.boxIndex].textContent = newString
+        wordle.newWord.push(newString)
+        console.log(wordle.newWord)
+        console.log(wordleBox[wordle.boxIndex].id)
+        wordle.boxIndex++
+        wordle.wordleNumCount++
+
+        if (wordleBox[wordle.boxIndex - 1].id.includes('-4')){
+        wordle.geussWord = true
+        return
+    }
+    }
+}
+
+const updateTextViaDiv = (keyId) => {
+    const wordleBox = document.querySelectorAll('.wordle-box')
+    let key = `${keyId}`
+    let newString = key.replace('Key', '')
+
+    if(key === `Backspace`){
+        wordleBox[wordle.boxIndex - 1].textContent = ``
+        wordle.boxIndex--
+    } else{
+        wordleBox[wordle.boxIndex].textContent = newString
+        wordle.boxIndex++
+    }
 }
 
 const createWordleHtml = (length = 5) => {
