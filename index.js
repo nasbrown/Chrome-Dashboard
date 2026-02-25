@@ -5,30 +5,35 @@ import { wordleArrFive, wordleArrSix } from './wordle-data.js'
 
 
 //Event Listeners for Link components, etc.
+/* */
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', (e) => {
     createWordleHtml()
     createKeyBoardHtml(wordle.keyboard)
-})
+}) 
 
 document.addEventListener('keydown', (e) => {
-    const wordleBox = document.querySelectorAll('.wordle-box')
     const pressedKey = e.key
     const isLetter = /^[a-zA-Z]$/.test(pressedKey)
 
+     const wordleBox = document.querySelectorAll('.wordle-box')
+
     if(isLetter){
-        if(wordle.geussWord && wordleBox[wordle.boxIndex - 1].id.includes('-4')){
-            console.log(wordle.boxIndex)
-            alert('Please press enter to input your guess')
-            return
-        } else{
-            updateTextViaKeyBoard(pressedKey)
+        if(wordleBox[wordle.boxIndex ? wordle.boxIndex - 1 : 0].id.includes('-4') && wordle.geussWord){
+        alert('Please press Enter to confirm your answer')
+        return
+     } else{
+        if(wordle.boxIndex < wordle.row + 5){
+            console.log('Hi')
         }
+        updateTextViaKeyBoard(pressedKey)
+     }
+    } else if(pressedKey === `Backspace`){
+        wordle.boxIndex > wordle.row ? updateTextViaKeyBoard(pressedKey) : alert('Error')
     } else if(pressedKey === 'Enter'){
         someFunctionVerifyingAnswer()
-    } else if(pressedKey === `Backspace`){
-        updateTextViaKeyBoard(pressedKey)
     }
+
 })
 
 document.addEventListener('submit', async (e) => {
@@ -81,6 +86,8 @@ document.addEventListener('click', (e) => {
 
 const wordleMethods = () => {
 
+    let boxIndex = 0
+    
     return {
         keyboard: [
            ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',], 
@@ -91,11 +98,10 @@ const wordleMethods = () => {
         width: 5,
         sWidth: 6,
         row: 0,
-        column: 0,
         gameOver: false,
         geussWord: false,
         wordleNumCount: 1,
-        boxIndex: 0,
+        boxIndex: boxIndex,
         newWord: [],
         testWord: 'UUUUU',
     }
@@ -110,11 +116,12 @@ const chooseWordOfTheDay = (arr = ['Nasia', 'Louuu']) => {
     return arr[getRandomWord].toUpperCase()
 }
 
-const someFunctionVerifyingAnswer = (key) => {
+const someFunctionVerifyingAnswer = () => {
     let fullString = wordle.newWord.join('')
     if(fullString === wordle.testWord){
         wordle.geussWord = false
-        wordle.newWord.length = 0
+        wordle.newWord = []
+
         alert('Correct!')
     } else{
         alert('Try again!')
@@ -123,29 +130,27 @@ const someFunctionVerifyingAnswer = (key) => {
 
 const updateTextViaKeyBoard = (keyId) => {
     const wordleBox = document.querySelectorAll('.wordle-box')
+    const wordleBoxArr = [...wordleBox]
     let key = `${keyId}`
     let newString = key.toUpperCase()
 
     if(key === `Backspace`){
-        wordleBox[wordle.boxIndex - 1].textContent = ``
+        wordleBoxArr[wordle.boxIndex - 1 ? wordle.boxIndex - 1 : 0].textContent = ``
         wordle.newWord.pop(newString)
-        console.log(wordle.newWord)
-        console.log(wordleBox[wordle.boxIndex-1].id)
         wordle.boxIndex--
         wordle.wordleNumCount--
     }
      else{
-        wordleBox[wordle.boxIndex].textContent = newString
+        wordleBoxArr[wordle.boxIndex ? wordle.boxIndex : 0].textContent = newString
         wordle.newWord.push(newString)
-        console.log(wordle.newWord)
-        console.log(wordleBox[wordle.boxIndex].id)
         wordle.boxIndex++
         wordle.wordleNumCount++
 
-        if (wordleBox[wordle.boxIndex - 1].id.includes('-4')){
+        if (wordleBoxArr[wordle.boxIndex ? wordle.boxIndex - 1 : 0].id.indexOf('-4') !== -1){
         wordle.geussWord = true
         return
-    }
+    } 
+
     }
 }
 
@@ -162,6 +167,7 @@ const updateTextViaDiv = (keyId) => {
         wordle.boxIndex++
     }
 }
+
 
 const createWordleHtml = (length = 5) => {
     for(let height = 0; height < 6; height++){
@@ -203,6 +209,7 @@ const createKeyBoardHtml = (arr = []) => {
         }
     }
 }
+
 
 //Pomodoro Timer Component
 
