@@ -19,17 +19,15 @@ document.addEventListener('keydown', (e) => {
      const wordleBox = document.querySelectorAll('.wordle-box')
 
     if(isLetter){
-        if(wordleBox[wordle.boxIndex ? wordle.boxIndex - 1 : 0].id.includes('-4') && wordle.geussWord){
+        if(wordleBox[Math.max(0, wordle.boxIndex - 1)].id.includes('-4') && wordle.geussWord){
         alert('Please press Enter to confirm your answer')
         return
      } else{
-        if(wordle.boxIndex < wordle.row + 5){
-            console.log('Hi')
-        }
         updateTextViaKeyBoard(pressedKey)
      }
     } else if(pressedKey === `Backspace`){
-        wordle.boxIndex > wordle.row ? updateTextViaKeyBoard(pressedKey) : alert('Error')
+        updateTextViaKeyBoard(pressedKey) 
+        
     } else if(pressedKey === 'Enter'){
         someFunctionVerifyingAnswer()
     }
@@ -100,7 +98,7 @@ const wordleMethods = () => {
         row: 0,
         gameOver: false,
         geussWord: false,
-        wordleNumCount: 1,
+        wordleNumCount: 0,
         boxIndex: boxIndex,
         newWord: [],
         testWord: 'UUUUU',
@@ -121,8 +119,8 @@ const someFunctionVerifyingAnswer = () => {
     if(fullString === wordle.testWord){
         wordle.geussWord = false
         wordle.newWord = []
-
         alert('Correct!')
+        return
     } else{
         alert('Try again!')
     }
@@ -130,28 +128,30 @@ const someFunctionVerifyingAnswer = () => {
 
 const updateTextViaKeyBoard = (keyId) => {
     const wordleBox = document.querySelectorAll('.wordle-box')
-    const wordleBoxArr = [...wordleBox]
     let key = `${keyId}`
     let newString = key.toUpperCase()
 
     if(key === `Backspace`){
-        wordleBoxArr[wordle.boxIndex - 1 ? wordle.boxIndex - 1 : 0].textContent = ``
+        wordleBox[Math.max(0, wordle.boxIndex - 1)].textContent = ``
         wordle.newWord.pop(newString)
         wordle.boxIndex--
         wordle.wordleNumCount--
-    }
+    } 
      else{
-        wordleBoxArr[wordle.boxIndex ? wordle.boxIndex : 0].textContent = newString
+        wordleBox[Math.max(0, wordle.boxIndex)].textContent = newString
         wordle.newWord.push(newString)
         wordle.boxIndex++
         wordle.wordleNumCount++
 
-        if (wordleBoxArr[wordle.boxIndex ? wordle.boxIndex - 1 : 0].id.indexOf('-4') !== -1){
+        if (wordleBox[wordle.boxIndex ? wordle.boxIndex - 1 : 0].id.indexOf('-4') !== -1){
         wordle.geussWord = true
         return
     } 
-
     }
+}
+
+const evaluateInput = () => {
+
 }
 
 const updateTextViaDiv = (keyId) => {
