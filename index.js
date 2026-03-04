@@ -153,7 +153,7 @@ const verifyWordleWord = () => {
             } 
             
             if(testWord.includes(key) && wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor !== `green`){
-                wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor = `yellow`
+                wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor = `#FFD300`
             }
         }) 
         alert('Try again!')
