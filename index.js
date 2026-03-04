@@ -18,20 +18,26 @@ document.addEventListener('keydown', (e) => {
 
      const wordleBox = document.querySelectorAll('.wordle-box')
 
-    if(isLetter){
-        if(wordleBox[Math.max(0, wordle.boxIndex - 1)].id.includes('-4') && wordle.geussWord){
-        alert('Please press Enter to confirm your answer')
-        return
-     } else{
-        updateTextViaKeyBoard(pressedKey)
-     }
-    } else if(pressedKey === `Backspace`){
-        updateTextViaKeyBoard(pressedKey) 
-        
-    } else if(pressedKey === 'Enter'){
-        someFunctionVerifyingAnswer()
-    }
+     const rowLimit = (wordle.row + 1) * wordle.width
 
+     if(isLetter){
+
+        if(wordle.boxIndex < rowLimit){
+            updateTextViaKeyBoard(pressedKey)
+        }
+     } else if(pressedKey === `Backspace`){
+        const rowStart = wordle.row * wordle.width
+
+        if(wordle.boxIndex > rowStart){
+            updateTextViaKeyBoard(pressedKey)
+        }
+     } else if(pressedKey === `Enter`){
+        if(wordle.boxIndex === rowLimit && wordle.row < 5){
+            wordle.row++
+        } else if(wordle.row === 5 && wordle.boxIndex === rowLimit){
+            alert(`Dat's it!`)
+        }
+     }
 })
 
 document.addEventListener('submit', async (e) => {
@@ -101,6 +107,7 @@ const wordleMethods = () => {
         wordleNumCount: 0,
         boxIndex: boxIndex,
         newWord: [],
+        guessWordArr: [],
         testWord: 'UUUUU',
     }
 }
@@ -114,9 +121,12 @@ const chooseWordOfTheDay = (arr = ['Nasia', 'Louuu']) => {
     return arr[getRandomWord].toUpperCase()
 }
 
+/*
 const someFunctionVerifyingAnswer = () => {
     let fullString = wordle.newWord.join('')
+
     if(fullString === wordle.testWord){
+        wordle.guessWordArr.push(fullString)
         wordle.geussWord = false
         wordle.newWord = []
         alert('Correct!')
@@ -124,7 +134,7 @@ const someFunctionVerifyingAnswer = () => {
     } else{
         alert('Try again!')
     }
-}
+} */
 
 const updateTextViaKeyBoard = (keyId) => {
     const wordleBox = document.querySelectorAll('.wordle-box')
@@ -150,9 +160,6 @@ const updateTextViaKeyBoard = (keyId) => {
     }
 }
 
-const evaluateInput = () => {
-
-}
 
 const updateTextViaDiv = (keyId) => {
     const wordleBox = document.querySelectorAll('.wordle-box')
