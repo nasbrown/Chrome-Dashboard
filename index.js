@@ -20,10 +20,13 @@ document.addEventListener('keydown', (e) => {
 
      const rowLimit = (wordle.row + 1) * wordle.width
 
-     if(isLetter){
+     if(!wordle.geussWord){
+        if(isLetter){
 
-        if(wordle.boxIndex < rowLimit){
+        if(wordle.boxIndex < wordle.rowLimit()){
             updateTextViaKeyBoard(pressedKey)
+            console.log(wordle.boxIndex)
+            console.log(wordle.rowLimit())
         }
      } else if(pressedKey === `Backspace`){
         const rowStart = wordle.row * wordle.width
@@ -32,11 +35,17 @@ document.addEventListener('keydown', (e) => {
             updateTextViaKeyBoard(pressedKey)
         }
      } else if(pressedKey === `Enter`){
-        if(wordle.boxIndex === rowLimit && wordle.row < 5){
+        if(wordle.boxIndex === wordle.rowLimit() && wordle.row < 5){
+            verifyWordleWord()
+            wordle.newWord = []
             wordle.row++
-        } else if(wordle.row === 5 && wordle.boxIndex === rowLimit){
+        } else if(wordle.row === 5 && wordle.boxIndex === wordle.rowLimit()){
+            verifyWordleWord()
             alert(`Dat's it!`)
         }
+     }
+     } else{
+        alert('Congrats!, You guessed correctly!')
      }
 })
 
@@ -91,6 +100,7 @@ document.addEventListener('click', (e) => {
 const wordleMethods = () => {
 
     let boxIndex = 0
+    let rowLimit = 0
     
     return {
         keyboard: [
@@ -106,9 +116,12 @@ const wordleMethods = () => {
         geussWord: false,
         wordleNumCount: 0,
         boxIndex: boxIndex,
+        rowLimit: function(){
+            rowLimit = (this.row + 1) * this.width
+            return rowLimit
+        },
         newWord: [],
-        guessWordArr: [],
-        testWord: 'UUUUU',
+        testWord: 'DAIRY',
     }
 }
 
@@ -121,20 +134,31 @@ const chooseWordOfTheDay = (arr = ['Nasia', 'Louuu']) => {
     return arr[getRandomWord].toUpperCase()
 }
 
-/*
-const someFunctionVerifyingAnswer = () => {
+
+const verifyWordleWord = () => {
+    const wordleBox = document.querySelectorAll('.wordle-box')
     let fullString = wordle.newWord.join('')
 
+    let testWord = wordle.testWord.split('')
+
     if(fullString === wordle.testWord){
-        wordle.guessWordArr.push(fullString)
-        wordle.geussWord = false
+        wordle.geussWord = true
         wordle.newWord = []
         alert('Correct!')
-        return
     } else{
+        
+        wordle.newWord.forEach((key, i) => {
+            if(key === testWord[i]){
+                wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor = `green`
+            } 
+            
+            if(testWord.includes(key) && wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor !== `green`){
+                wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor = `yellow`
+            }
+        }) 
         alert('Try again!')
     }
-} */
+} 
 
 const updateTextViaKeyBoard = (keyId) => {
     const wordleBox = document.querySelectorAll('.wordle-box')
@@ -146,17 +170,14 @@ const updateTextViaKeyBoard = (keyId) => {
         wordle.newWord.pop(newString)
         wordle.boxIndex--
         wordle.wordleNumCount--
-    } 
+        console.log(wordle.newWord)
+    }
      else{
         wordleBox[Math.max(0, wordle.boxIndex)].textContent = newString
         wordle.newWord.push(newString)
         wordle.boxIndex++
         wordle.wordleNumCount++
-
-        if (wordleBox[wordle.boxIndex ? wordle.boxIndex - 1 : 0].id.indexOf('-4') !== -1){
-        wordle.geussWord = true
-        return
-    } 
+        console.log(wordle.newWord)
     }
 }
 
