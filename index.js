@@ -25,8 +25,6 @@ document.addEventListener('keydown', (e) => {
 
         if(wordle.boxIndex < wordle.rowLimit()){
             updateTextViaKeyBoard(pressedKey)
-            console.log(wordle.boxIndex)
-            console.log(wordle.rowLimit())
         }
      } else if(pressedKey === `Backspace`){
         const rowStart = wordle.row * wordle.width
@@ -45,6 +43,7 @@ document.addEventListener('keydown', (e) => {
         }
      }
      } else{
+        
         alert('Congrats!, You guessed correctly!')
      }
 })
