@@ -151,6 +151,26 @@ const chooseWordOfTheDay = (arr = ['Nasia', 'Louuu']) => {
 }
 
 
+//Get words from list and randomize it so it can take from the dictionary api as well
+const getWordsFromLocalStorage = () => {
+    const todayDate = new Date().toLocaleDateString()
+    const lastDate = localStorage.getItem('lastDate')
+
+   if(!lastDate){
+    localStorage.setItem('lastDate', new Date().toLocaleDateString())
+   } else if(!localStorage.getItem('wordleArr')){
+    localStorage.setItem('wordleArr', `${wordleArrFive}`)
+   }
+
+   if(todayDate !== lastDate){
+    getBodyImage(chooseAnimorCharNumber())
+    localStorage.setItem('lastDate', todayDate)
+   } else{
+    document.body.style.backgroundImage = localStorage.getItem('bodyImage')
+   }
+}
+
+
 const wordleWordColors = () => {
     const wordleBox = document.querySelectorAll('.wordle-box')
     const wordleKeyData = document.querySelectorAll('.wordle-keys')
