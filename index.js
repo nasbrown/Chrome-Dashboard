@@ -16,13 +16,7 @@ document.addEventListener('keydown', (e) => {
     const pressedKey = e.key
     const isLetter = /^[a-zA-Z]$/.test(pressedKey)
 
-     const wordleBox = document.querySelectorAll('.wordle-box')
-
-     const rowLimit = (wordle.row + 1) * wordle.width
-
-     if(!wordle.geussWord){
         if(isLetter){
-
         if(wordle.boxIndex < wordle.rowLimit()){
             updateTextViaKeyBoard(pressedKey)
         }
@@ -36,16 +30,15 @@ document.addEventListener('keydown', (e) => {
         if(wordle.boxIndex === wordle.rowLimit() && wordle.row < 5){
             verifyWordleWord()
             wordle.newWord = []
-            wordle.row++
+            setTimeout(() => {
+                wordle.row++
+            }, 3 * 500)
         } else if(wordle.row === 5 && wordle.boxIndex === wordle.rowLimit()){
             verifyWordleWord()
             alert(`Dat's it!`)
         }
      }
-     } else{
-        
-        alert('Congrats!, You guessed correctly!')
-     }
+     
 })
 
 document.addEventListener('submit', async (e) => {
@@ -90,7 +83,31 @@ document.addEventListener('click', (e) => {
     } else if(e.target.id === 'play-pause'){
         pomoDoro.activePomo()
     } else if(e.target.dataset.keyId){
-        updateTextViaDiv(e.target.dataset.keyId)
+        
+        const isLetter = /^[a-zA-Z]$/.test(e.target.dataset.keyId.replace('Key', ''))
+
+        if(isLetter){
+        if(wordle.boxIndex < wordle.rowLimit()){
+            updateTextViaDiv(e.target.dataset.keyId)
+        }
+     } else if(e.target.dataset.keyId === `Backspace`){
+        const rowStart = wordle.row * wordle.width
+
+        if(wordle.boxIndex > rowStart){
+            updateTextViaDiv(e.target.dataset.keyId)
+        }
+     } else if(e.target.dataset.keyId === `Enter`){
+        if(wordle.boxIndex === wordle.rowLimit() && wordle.row < 5){
+            verifyWordleWord()
+            wordle.newWord = []
+            wordle.row++
+        } else if(wordle.row === 5 && wordle.boxIndex === wordle.rowLimit()){
+            verifyWordleWord()
+            alert(`Dat's it!`)
+        }
+     } else{
+        console.log('nope')
+     }
     }
 })
 
@@ -120,7 +137,7 @@ const wordleMethods = () => {
             return rowLimit
         },
         newWord: [],
-        testWord: 'DAIRY',
+        testWord: 'NASIA',
     }
 }
 
@@ -134,27 +151,61 @@ const chooseWordOfTheDay = (arr = ['Nasia', 'Louuu']) => {
 }
 
 
-const verifyWordleWord = () => {
+const wordleWordColors = () => {
     const wordleBox = document.querySelectorAll('.wordle-box')
-    let fullString = wordle.newWord.join('')
+    const wordleKeyData = document.querySelectorAll('.wordle-keys')
+    const keyframes = [
+                {transform: 'scaleY(1)', backgroundColor: 'transparent'},
+                {transform: 'scaleY(0)'},
+                {transform: 'scaleY(1)'}
+              ]
+
+              const options = {
+                easing: 'ease',
+                duration: 1000,
+              }
 
     let testWord = wordle.testWord.split('')
 
+    wordle.newWord.forEach((key, i) => {
+        setTimeout(() => {
+            if(key === testWord[i]){
+
+              wordleBox[i + (wordle.row * wordle.width)].animate(keyframes, options)
+              wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor = `green`
+
+              wordleKeyData.forEach((word) => {
+                    if(key === word.textContent){
+                        word.style.backgroundColor = `green`
+                    }
+                })
+            } 
+            
+            if(testWord.includes(key) && wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor !== `green`){
+
+                wordleBox[i + (wordle.row * wordle.width)].animate(keyframes, options)
+                wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor = `#FFD300`
+
+                wordleKeyData.forEach((word) => {
+                    if(key === word.textContent){
+                        word.style.backgroundColor = `#FFD300`
+                    }
+                })
+            }
+        }, ((i + 1) * 500)/ 2)
+        }) 
+}
+
+const verifyWordleWord = () => {
+    let fullString = wordle.newWord.join('')
+
     if(fullString === wordle.testWord){
+        wordleWordColors()
         wordle.geussWord = true
         wordle.newWord = []
         alert('Correct!')
     } else{
-        
-        wordle.newWord.forEach((key, i) => {
-            if(key === testWord[i]){
-                wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor = `green`
-            } 
-            
-            if(testWord.includes(key) && wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor !== `green`){
-                wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor = `#FFD300`
-            }
-        }) 
+        wordleWordColors()
         alert('Try again!')
     }
 } 
@@ -169,14 +220,12 @@ const updateTextViaKeyBoard = (keyId) => {
         wordle.newWord.pop(newString)
         wordle.boxIndex--
         wordle.wordleNumCount--
-        console.log(wordle.newWord)
     }
      else{
         wordleBox[Math.max(0, wordle.boxIndex)].textContent = newString
         wordle.newWord.push(newString)
         wordle.boxIndex++
         wordle.wordleNumCount++
-        console.log(wordle.newWord)
     }
 }
 
@@ -186,12 +235,17 @@ const updateTextViaDiv = (keyId) => {
     let key = `${keyId}`
     let newString = key.replace('Key', '')
 
-    if(key === `Backspace`){
-        wordleBox[wordle.boxIndex - 1].textContent = ``
+     if(key === `Backspace`){
+        wordleBox[Math.max(0, wordle.boxIndex - 1)].textContent = ``
+        wordle.newWord.pop(newString)
         wordle.boxIndex--
-    } else{
-        wordleBox[wordle.boxIndex].textContent = newString
+        wordle.wordleNumCount--
+    }
+     else{
+        wordleBox[Math.max(0, wordle.boxIndex)].textContent = newString
+        wordle.newWord.push(newString)
         wordle.boxIndex++
+        wordle.wordleNumCount++
     }
 }
 

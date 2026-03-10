@@ -351,6 +351,7 @@ h1{
     font-size: 2rem;
     border: solid 1px black;
     font-weight: bold;
+    transition-delay: 3ms;
 }
 
 
