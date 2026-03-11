@@ -143,6 +143,24 @@ const wordleMethods = () => {
 
 const wordle = wordleMethods()
 
+const chooseWordleArrOfTheDay = (arr = []) => {
+    const getRandomArr = Math.floor(Math.random() * arr.length)
+
+    return arr[getRandomArr]
+}
+
+const getWordleBoxCount = (arr) => {
+    if(arr[0].length === 5){
+        return 5
+    } else{
+        return 6
+    }
+}
+
+const getWordleWordFromArr = () => {
+    
+}
+
 const chooseWordOfTheDay = (arr = ['Nasia', 'Louuu']) => {
 
     const getRandomWord = Math.floor(Math.random() * arr.length)
@@ -163,7 +181,7 @@ const getWordsFromLocalStorage = () => {
    }
 
    if(todayDate !== lastDate){
-    getBodyImage(chooseAnimorCharNumber())
+    getBodyImage(chooseWordOfTheDay())
     localStorage.setItem('lastDate', todayDate)
    } else{
     document.body.style.backgroundImage = localStorage.getItem('bodyImage')
