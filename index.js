@@ -3,12 +3,10 @@ import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
 import { wordleArrFive, wordleArrSix } from './wordle-data.js'
 //Dictionary API for the Wordle to implement --- https://dictionaryapi.dev/
 
-
 //Event Listeners for Link components, etc.
-/* */
 
 document.addEventListener('DOMContentLoaded', (e) => {
-    createWordleHtml(getWordleBoxCount(chooseWordleArrOfTheDay(wordle.mainArrays)))
+    //wordle.html(wordle.getRandom())
     createKeyBoardHtml(wordle.keyboard)
 }) 
 
@@ -113,10 +111,17 @@ document.addEventListener('click', (e) => {
 
 //Wordle Component
 
+/*
+
+Get a random array and if the first length is 6 or 5, decide what words go
+
+*/
+
 const wordleMethods = () => {
 
     let boxIndex = 0
     let rowLimit = 0
+    let wordArr = []
     
     return {
         keyboard: [
@@ -129,6 +134,30 @@ const wordleMethods = () => {
         width: 5,
         sWidth: 6,
         row: 0,
+        getRandom: function() {
+            const getRandomArr = Math.floor(Math.random() * this.mainArrays.length)
+            let mainArr = this.mainArrays[getRandomArr]
+
+            return mainArr
+        },
+        html: function(arr){
+            for(let height = 0; height < 6; height++){
+                for(let row = 0; row < arr[0].length; row++){
+                    let tile = document.createElement('span')
+                    tile.id = height.toString() + '-' + row.toString()
+                    tile.classList.add('wordle-box')
+                    tile.innerText = ' '
+                    const wordleBoard = document.getElementById('board')
+                    if(arr[0].length === 6){
+                        wordleBoard.style.gridTemplateColumns = 'auto auto auto auto auto auto'
+                    } else{
+                        wordleBoard.style.gridTemplateColumns = 'auto auto auto auto auto'
+                    }
+                    wordleBoard.appendChild(tile)
+            }
+            }
+        },
+
         gameOver: false,
         geussWord: false,
         wordleNumCount: 0,
@@ -138,36 +167,11 @@ const wordleMethods = () => {
             return rowLimit
         },
         newWord: [],
-        testWord: 'NASIA',
+        testWord: '',
     }
 }
 
 const wordle = wordleMethods()
-
-const chooseWordleArrOfTheDay = (arr = []) => {
-    const getRandomArr = Math.floor(Math.random() * arr.length)
-
-    return arr[getRandomArr]
-}
-
-const getWordleBoxCount = (arr) => {
-    if(arr[0].length === 5){
-        return 5
-    } else{
-        return 6
-    }
-}
-
-const getWordleWordFromArr = (arr) => {
-    
-}
-
-const chooseWordOfTheDay = (arr = ['Nasia', 'Louuu']) => {
-
-    const getRandomWord = Math.floor(Math.random() * arr.length)
-
-    return arr[getRandomWord].toUpperCase()
-}
 
 
 //Get words from list and randomize it so it can take from the dictionary api as well
@@ -182,7 +186,6 @@ const getWordsFromLocalStorage = () => {
    }
 
    if(todayDate !== lastDate){
-    getBodyImage(chooseWordOfTheDay())
     localStorage.setItem('lastDate', todayDate)
    } else{
     document.body.style.backgroundImage = localStorage.getItem('bodyImage')
@@ -288,24 +291,6 @@ const updateTextViaDiv = (keyId) => {
     }
 }
 
-
-const createWordleHtml = (length) => {
-    for(let height = 0; height < 6; height++){
-        for(let row = 0; row < length; row++){
-            let tile = document.createElement('span')
-            tile.id = height.toString() + '-' + row.toString()
-            tile.classList.add('wordle-box')
-            tile.innerText = ' '
-            const wordleBoard = document.getElementById('board')
-            if(length === 6){
-                wordleBoard.style.gridTemplateColumns = 'auto auto auto auto auto auto'
-            } else{
-                wordleBoard.style.gridTemplateColumns = 'auto auto auto auto auto'
-            }
-            wordleBoard.appendChild(tile)
-        }
-    }
-}
 
 const createKeyBoardHtml = (arr = []) => {
     for(let i = 0; i < arr.length; i++){
@@ -746,7 +731,7 @@ const getBodyImage = async (img = {}) => {
     }
 }
 
-const getImgOnceADay = () => {
+const getLocalStorageItemsOnceADay = () => {
 
    const todayDate = new Date().toLocaleDateString()
    const lastDate = localStorage.getItem('lastDate')
@@ -755,16 +740,20 @@ const getImgOnceADay = () => {
     localStorage.setItem('lastDate', new Date().toLocaleDateString())
    } else if(!localStorage.getItem('bodyImage')){
     localStorage.setItem('bodyImage', `url(images/zoro.jpg), linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5))`)
+   } else if (!localStorage.getItem('wordleArr')) {
+    localStorage.setItem('wordleArr', `${wordleArrFive}`)
    }
 
    if(todayDate !== lastDate){
     getBodyImage(chooseAnimorCharNumber())
+    wordle.getRandom()
     localStorage.setItem('lastDate', todayDate)
    } else{
     document.body.style.backgroundImage = localStorage.getItem('bodyImage')
+    wordle.testWord = ''
    }
 }
 
-getImgOnceADay()
+getLocalStorageItemsOnceADay()
 
 
