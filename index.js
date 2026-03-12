@@ -8,7 +8,7 @@ import { wordleArrFive, wordleArrSix } from './wordle-data.js'
 /* */
 
 document.addEventListener('DOMContentLoaded', (e) => {
-    createWordleHtml()
+    createWordleHtml(getWordleBoxCount(chooseWordleArrOfTheDay(wordle.mainArrays)))
     createKeyBoardHtml(wordle.keyboard)
 }) 
 
@@ -124,6 +124,7 @@ const wordleMethods = () => {
              ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',],
              ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', `⌫`,],
         ],
+        mainArrays: [wordleArrFive, wordleArrSix],
         height: 6,
         width: 5,
         sWidth: 6,
@@ -157,7 +158,7 @@ const getWordleBoxCount = (arr) => {
     }
 }
 
-const getWordleWordFromArr = () => {
+const getWordleWordFromArr = (arr) => {
     
 }
 
@@ -288,14 +289,19 @@ const updateTextViaDiv = (keyId) => {
 }
 
 
-const createWordleHtml = (length = 5) => {
+const createWordleHtml = (length) => {
     for(let height = 0; height < 6; height++){
-        for(let row = 0; row < 5; row++){
+        for(let row = 0; row < length; row++){
             let tile = document.createElement('span')
             tile.id = height.toString() + '-' + row.toString()
             tile.classList.add('wordle-box')
             tile.innerText = ' '
             const wordleBoard = document.getElementById('board')
+            if(length === 6){
+                wordleBoard.style.gridTemplateColumns = 'auto auto auto auto auto auto'
+            } else{
+                wordleBoard.style.gridTemplateColumns = 'auto auto auto auto auto'
+            }
             wordleBoard.appendChild(tile)
         }
     }
