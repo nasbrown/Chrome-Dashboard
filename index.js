@@ -28,6 +28,7 @@ document.addEventListener('keydown', (e) => {
      } else if(pressedKey === `Enter`){
         if(wordle.boxIndex === wordle.rowLimit() && wordle.row < 5){
             verifyWordleWord()
+            wordle.newWord = []
             setTimeout(() => {
                 wordle.row++
             }, 3 * 500)
@@ -74,7 +75,7 @@ document.addEventListener('click', (e) => {
     else if(e.target.id === 'return-pomo'){
         pomoDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
-        
+
     } else if(e.target.id === 'wordle'){
         mainDash.classList.toggle('hidden')
         wordleDash.classList.toggle('hidden')
@@ -89,12 +90,6 @@ document.addEventListener('click', (e) => {
 })
 
 //Wordle Component
-
-/*
-
-Get a random array and if the first length is 6 or 5, decide what words go
-
-*/
 
 const wordleMethods = () => {
 
@@ -154,7 +149,6 @@ const wordleMethods = () => {
 const wordle = wordleMethods()
 
 
-//Get words from list and randomize it so it can take from the dictionary api as well
 const getWordsFromLocalStorage = () => {
     const todayDate = new Date().toLocaleDateString()
     const lastDate = localStorage.getItem('lastDate')
