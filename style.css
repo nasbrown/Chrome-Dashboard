@@ -151,10 +151,6 @@ h1{
     filter: drop-shadow(0 0 5px #000000);
 }
 
-.hidden{
-    display: none;
-}
-
 /* Pomo page */
 
 #return-pomo, #return-wordle{
@@ -304,7 +300,7 @@ h1{
 }
 
 #board{
-    width: 30%;
+    width: 320px;
     height: 420px;
     display: grid;
     /*grid-template-columns: auto auto auto auto auto;*/
@@ -352,6 +348,10 @@ h1{
     border: solid 1px black;
     font-weight: bold;
     transition-delay: 3ms;
+}
+
+.hidden{
+    display: none;
 }
 
 

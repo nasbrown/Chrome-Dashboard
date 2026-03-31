@@ -6,8 +6,9 @@ import { wordleArrFive, wordleArrSix } from './wordle-data.js'
 //Event Listeners for Link components, etc.
 
 document.addEventListener('DOMContentLoaded', (e) => {
-    //wordle.html(wordle.getRandom())
+    createWordleBoxHtml()
     createKeyBoardHtml(wordle.keyboard)
+    console.log(wordle.testWord ='MIGHT')
 }) 
 
 document.addEventListener('keydown', (e) => {
@@ -27,13 +28,14 @@ document.addEventListener('keydown', (e) => {
      } else if(pressedKey === `Enter`){
         if(wordle.boxIndex === wordle.rowLimit() && wordle.row < 5){
             verifyWordleWord()
-            wordle.newWord = []
             setTimeout(() => {
                 wordle.row++
             }, 3 * 500)
         } else if(wordle.row === 5 && wordle.boxIndex === wordle.rowLimit()){
             verifyWordleWord()
             alert(`Dat's it!`)
+        } else{
+            alert('Please enter words!')
         }
      }
      
@@ -68,44 +70,21 @@ document.addEventListener('click', (e) => {
     } else if(e.target.id === 'focus'){
         pomoDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
-       
     } 
     else if(e.target.id === 'return-pomo'){
         pomoDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
-
-    } else if(e.target.id === 'return-wordle'){
-        pomoDash.classList.toggle('hidden')
+        
+    } else if(e.target.id === 'wordle'){
+        mainDash.classList.toggle('hidden')
+        wordleDash.classList.toggle('hidden')
+    }
+     else if(e.target.id === 'return-wordle'){
+        wordleDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
 
     } else if(e.target.id === 'play-pause'){
         pomoDoro.activePomo()
-    } else if(e.target.dataset.keyId){
-        
-        const isLetter = /^[a-zA-Z]$/.test(e.target.dataset.keyId.replace('Key', ''))
-
-        if(isLetter){
-        if(wordle.boxIndex < wordle.rowLimit()){
-            updateTextViaDiv(e.target.dataset.keyId)
-        }
-     } else if(e.target.dataset.keyId === `Backspace`){
-        const rowStart = wordle.row * wordle.width
-
-        if(wordle.boxIndex > rowStart){
-            updateTextViaDiv(e.target.dataset.keyId)
-        }
-     } else if(e.target.dataset.keyId === `Enter`){
-        if(wordle.boxIndex === wordle.rowLimit() && wordle.row < 5){
-            verifyWordleWord()
-            wordle.newWord = []
-            wordle.row++
-        } else if(wordle.row === 5 && wordle.boxIndex === wordle.rowLimit()){
-            verifyWordleWord()
-            alert(`Dat's it!`)
-        }
-     } else{
-        console.log('nope')
-     }
     }
 })
 
@@ -122,6 +101,7 @@ const wordleMethods = () => {
     let boxIndex = 0
     let rowLimit = 0
     let wordArr = []
+    let testWord
     
     return {
         keyboard: [
@@ -140,19 +120,19 @@ const wordleMethods = () => {
 
             return mainArr
         },
-        html: function(arr){
+        html: function(){
             for(let height = 0; height < 6; height++){
-                for(let row = 0; row < arr[0].length; row++){
+                for(let row = 0; row < 5; row++){
                     let tile = document.createElement('span')
                     tile.id = height.toString() + '-' + row.toString()
                     tile.classList.add('wordle-box')
                     tile.innerText = ' '
                     const wordleBoard = document.getElementById('board')
-                    if(arr[0].length === 6){
-                        wordleBoard.style.gridTemplateColumns = 'auto auto auto auto auto auto'
-                    } else{
+                    //if(arr[0].length === 6){
+                        //wordleBoard.style.gridTemplateColumns = 'auto auto auto auto auto auto'
+                    //} else{
                         wordleBoard.style.gridTemplateColumns = 'auto auto auto auto auto'
-                    }
+                    //}
                     wordleBoard.appendChild(tile)
             }
             }
@@ -167,7 +147,7 @@ const wordleMethods = () => {
             return rowLimit
         },
         newWord: [],
-        testWord: '',
+        testWord: testWord = 'MIGHT',
     }
 }
 
@@ -208,11 +188,11 @@ const wordleWordColors = () => {
               }
 
     let testWord = wordle.testWord.split('')
+    console.log(wordle.testWord)
 
     wordle.newWord.forEach((key, i) => {
         setTimeout(() => {
             if(key === testWord[i]){
-
               wordleBox[i + (wordle.row * wordle.width)].animate(keyframes, options)
               wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor = `green`
 
@@ -224,7 +204,6 @@ const wordleWordColors = () => {
             } 
             
             if(testWord.includes(key) && wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor !== `green`){
-
                 wordleBox[i + (wordle.row * wordle.width)].animate(keyframes, options)
                 wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor = `#FFD300`
 
@@ -260,6 +239,7 @@ const updateTextViaKeyBoard = (keyId) => {
     if(key === `Backspace`){
         wordleBox[Math.max(0, wordle.boxIndex - 1)].textContent = ``
         wordle.newWord.pop(newString)
+        console.log(wordle.newWord)
         wordle.boxIndex--
         wordle.wordleNumCount--
     }
@@ -318,6 +298,24 @@ const createKeyBoardHtml = (arr = []) => {
             })
         }
     }
+}
+
+const createWordleBoxHtml = () => {
+    for(let height = 0; height < 6; height++){
+                for(let row = 0; row < 5; row++){
+                    let tile = document.createElement('span')
+                    tile.id = height.toString() + '-' + row.toString()
+                    tile.classList.add('wordle-box')
+                    tile.innerText = ' '
+                    const wordleBoard = document.getElementById('board')
+                    //if(arr[0].length === 6){
+                        //wordleBoard.style.gridTemplateColumns = 'auto auto auto auto auto auto'
+                    //} else{
+                        wordleBoard.style.gridTemplateColumns = 'auto auto auto auto auto'
+                    //}
+                    wordleBoard.appendChild(tile)
+            }
+            }
 }
 
 
@@ -746,7 +744,6 @@ const getLocalStorageItemsOnceADay = () => {
 
    if(todayDate !== lastDate){
     getBodyImage(chooseAnimorCharNumber())
-    wordle.getRandom()
     localStorage.setItem('lastDate', todayDate)
    } else{
     document.body.style.backgroundImage = localStorage.getItem('bodyImage')
