@@ -1,6 +1,6 @@
 import mql from 'https://esm.sh/@microlink/mql'
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
-import { wordleArrFive, wordleArrSix } from './wordle-data.js'
+import { wordleArrFive } from './wordle-data.js'
 //Dictionary API for the Wordle to implement --- https://dictionaryapi.dev/
 
 //Event Listeners for Link components, etc.
@@ -8,13 +8,13 @@ import { wordleArrFive, wordleArrSix } from './wordle-data.js'
 document.addEventListener('DOMContentLoaded', (e) => {
     createWordleBoxHtml()
     createKeyBoardHtml(wordle.keyboard)
-    console.log(wordle.testWord ='MIGHT')
 }) 
 
 document.addEventListener('keydown', (e) => {
     const pressedKey = e.key
     const isLetter = /^[a-zA-Z]$/.test(pressedKey)
 
+    if(!wordle.geussWord){
         if(isLetter){
         if(wordle.boxIndex < wordle.rowLimit()){
             updateTextViaKeyBoard(pressedKey)
@@ -39,7 +39,9 @@ document.addEventListener('keydown', (e) => {
             alert('Please enter words!')
         }
      }
-     
+    } else{
+        alert(`You Won!, Game Over!`)
+    }
 })
 
 document.addEventListener('submit', async (e) => {
@@ -68,6 +70,7 @@ document.addEventListener('click', (e) => {
     
     if(e.target.dataset.linkId){
         mainLinkArr.deleteLink(e.target.dataset.linkId)
+
     } else if(e.target.id === 'focus'){
         pomoDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
@@ -79,13 +82,27 @@ document.addEventListener('click', (e) => {
     } else if(e.target.id === 'wordle'){
         mainDash.classList.toggle('hidden')
         wordleDash.classList.toggle('hidden')
-    }
-     else if(e.target.id === 'return-wordle'){
+
+    } else if(e.target.id === 'return-wordle'){
         wordleDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
 
     } else if(e.target.id === 'play-pause'){
         pomoDoro.activePomo()
+
+    } else if (e.target.dataset.keyId){
+        if(!wordle.geussWord){
+            if(e.target.dataset.keyId === 'Enter'){
+            alert('Press Enter on your keyboard')
+        } else if(e.target.dataset.keyId === 'Backspace'){
+             alert('Press Backspace on your keyboard')
+        }
+         else{
+            updateTextViaDiv(e.target.dataset.keyId)
+        }
+        } else{
+            alert(`Game Over, You Won!`)
+        }
     }
 })
 
@@ -95,8 +112,6 @@ const wordleMethods = () => {
 
     let boxIndex = 0
     let rowLimit = 0
-    let wordArr = []
-    let testWord
     
     return {
         keyboard: [
@@ -104,12 +119,12 @@ const wordleMethods = () => {
              ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',],
              ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', `⌫`,],
         ],
-        mainArrays: [wordleArrFive, wordleArrSix],
+        mainArray: wordleArrFive,
         height: 6,
         width: 5,
         sWidth: 6,
         row: 0,
-        getRandom: function() {
+        getRandomArr: function() {
             const getRandomArr = Math.floor(Math.random() * this.mainArrays.length)
             let mainArr = this.mainArrays[getRandomArr]
 
@@ -132,7 +147,10 @@ const wordleMethods = () => {
             }
             }
         },
-
+        getRandomWord: function(arr){
+            const getRandomWord = Math.floor(Math.random() * arr.length)
+            return arr[getRandomWord]
+        },
         gameOver: false,
         geussWord: false,
         wordleNumCount: 0,
@@ -142,29 +160,13 @@ const wordleMethods = () => {
             return rowLimit
         },
         newWord: [],
-        testWord: testWord = 'MIGHT',
+        theWord: function(){
+            return localStorage.getItem('wordOfTheDay')
+        },
     }
 }
 
 const wordle = wordleMethods()
-
-
-const getWordsFromLocalStorage = () => {
-    const todayDate = new Date().toLocaleDateString()
-    const lastDate = localStorage.getItem('lastDate')
-
-   if(!lastDate){
-    localStorage.setItem('lastDate', new Date().toLocaleDateString())
-   } else if(!localStorage.getItem('wordleArr')){
-    localStorage.setItem('wordleArr', `${wordleArrFive}`)
-   }
-
-   if(todayDate !== lastDate){
-    localStorage.setItem('lastDate', todayDate)
-   } else{
-    document.body.style.backgroundImage = localStorage.getItem('bodyImage')
-   }
-}
 
 
 const wordleWordColors = () => {
@@ -181,8 +183,7 @@ const wordleWordColors = () => {
                 duration: 1000,
               }
 
-    let testWord = wordle.testWord.split('')
-    console.log(wordle.testWord)
+    let testWord = wordle.theWord().split('')
 
     wordle.newWord.forEach((key, i) => {
         setTimeout(() => {
@@ -214,11 +215,13 @@ const wordleWordColors = () => {
 const verifyWordleWord = () => {
     let fullString = wordle.newWord.join('')
 
-    if(fullString === wordle.testWord){
+    if(fullString === wordle.theWord()){
         wordleWordColors()
         wordle.geussWord = true
         wordle.newWord = []
         alert('Correct!')
+    } else if(wordle.geussWord){
+        alert('You Won!, Game Over!')
     } else{
         wordleWordColors()
         alert('Try again!')
@@ -233,7 +236,6 @@ const updateTextViaKeyBoard = (keyId) => {
     if(key === `Backspace`){
         wordleBox[Math.max(0, wordle.boxIndex - 1)].textContent = ``
         wordle.newWord.pop(newString)
-        console.log(wordle.newWord)
         wordle.boxIndex--
         wordle.wordleNumCount--
     }
@@ -727,24 +729,24 @@ const getLocalStorageItemsOnceADay = () => {
 
    const todayDate = new Date().toLocaleDateString()
    const lastDate = localStorage.getItem('lastDate')
+   let randomWord = wordle.getRandomWord(wordleArrFive)
 
    if(!lastDate){
     localStorage.setItem('lastDate', new Date().toLocaleDateString())
    } else if(!localStorage.getItem('bodyImage')){
     localStorage.setItem('bodyImage', `url(images/zoro.jpg), linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5))`)
-   } else if (!localStorage.getItem('wordleArr')) {
-    localStorage.setItem('wordleArr', `${wordleArrFive}`)
+   } else if(!localStorage.getItem('wordOfTheDay')){
+    localStorage.setItem('wordOfTheDay', `${randomWord.toUpperCase()}`)
    }
 
    if(todayDate !== lastDate){
     getBodyImage(chooseAnimorCharNumber())
+    localStorage.setItem('wordOfTheDay', `${randomWord.toUpperCase()}`)
     localStorage.setItem('lastDate', todayDate)
    } else{
     document.body.style.backgroundImage = localStorage.getItem('bodyImage')
-    wordle.testWord = ''
    }
 }
 
 getLocalStorageItemsOnceADay()
-
 
