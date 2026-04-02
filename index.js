@@ -14,7 +14,7 @@ document.addEventListener('keydown', (e) => {
     const pressedKey = e.key
     const isLetter = /^[a-zA-Z]$/.test(pressedKey)
 
-    if(!wordle.geussWord){
+    if(localStorage.getItem('wordleGameState') === "false"){
         if(isLetter){
         if(wordle.boxIndex < wordle.rowLimit()){
             updateTextViaKeyBoard(pressedKey)
@@ -40,7 +40,7 @@ document.addEventListener('keydown', (e) => {
         }
      }
     } else{
-        alert(`You Won!, Game Over!`)
+        alert(`You Won!, Game Over! Stay tune for the new word tomorrow!`)
     }
 })
 
@@ -91,7 +91,7 @@ document.addEventListener('click', (e) => {
         pomoDoro.activePomo()
 
     } else if (e.target.dataset.keyId){
-        if(!wordle.geussWord){
+        if(localStorage.getItem('wordleGameState') === "false"){ 
             if(e.target.dataset.keyId === 'Enter'){
             alert('Press Enter on your keyboard')
         } else if(e.target.dataset.keyId === 'Backspace'){
@@ -101,7 +101,7 @@ document.addEventListener('click', (e) => {
             updateTextViaDiv(e.target.dataset.keyId)
         }
         } else{
-            alert(`Game Over, You Won!`)
+             alert(`You Won!, Game Over! Stay tune for the new word tomorrow!`)
         }
     }
 })
@@ -112,18 +112,25 @@ const wordleMethods = () => {
 
     let boxIndex = 0
     let rowLimit = 0
+    let row = 0
+
+    localStorage.setItem('row', JSON.stringify(row))
+    let offRow = Number(localStorage.getItem('row'))
+    localStorage.setItem('boxIndex', JSON.stringify(boxIndex))
+    let offBoxIndex = Number(localStorage.getItem('boxIndex'))
     
     return {
         keyboard: [
            ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',], 
-             ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',],
+             ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L','È', 'Ò'],
              ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', `⌫`,],
         ],
         mainArray: wordleArrFive,
         height: 6,
         width: 5,
         sWidth: 6,
-        row: 0,
+        row: offRow
+        ,
         getRandomArr: function() {
             const getRandomArr = Math.floor(Math.random() * this.mainArrays.length)
             let mainArr = this.mainArrays[getRandomArr]
@@ -154,10 +161,13 @@ const wordleMethods = () => {
         gameOver: false,
         geussWord: false,
         wordleNumCount: 0,
-        boxIndex: boxIndex,
+        boxIndex: offBoxIndex
+        ,
         rowLimit: function(){
             rowLimit = (this.row + 1) * this.width
-            return rowLimit
+            localStorage.setItem('rowLimit', JSON.stringify(rowLimit))
+            let offRowLimit = Number(localStorage.getItem('rowLimit'))
+            return offRowLimit
         },
         newWord: [],
         theWord: function(){
@@ -218,10 +228,9 @@ const verifyWordleWord = () => {
     if(fullString === wordle.theWord()){
         wordleWordColors()
         wordle.geussWord = true
+        localStorage.setItem('wordleGameState', JSON.stringify(wordle.geussWord))
         wordle.newWord = []
         alert('Correct!')
-    } else if(wordle.geussWord){
-        alert('You Won!, Game Over!')
     } else{
         wordleWordColors()
         alert('Try again!')
@@ -254,15 +263,15 @@ const updateTextViaDiv = (keyId) => {
     let newString = key.replace('Key', '')
 
      if(key === `Backspace`){
-        wordleBox[Math.max(0, wordle.boxIndex - 1)].textContent = ``
+        wordleBox[Math.max(0, wordle.boxIndex() - 1)].textContent = ``
         wordle.newWord.pop(newString)
-        wordle.boxIndex--
+        wordle.boxIndex()--
         wordle.wordleNumCount--
     }
      else{
-        wordleBox[Math.max(0, wordle.boxIndex)].textContent = newString
+        wordleBox[Math.max(0, wordle.boxIndex())].textContent = newString
         wordle.newWord.push(newString)
-        wordle.boxIndex++
+        wordle.boxIndex()++
         wordle.wordleNumCount++
     }
 }
@@ -737,11 +746,15 @@ const getLocalStorageItemsOnceADay = () => {
     localStorage.setItem('bodyImage', `url(images/zoro.jpg), linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, .5))`)
    } else if(!localStorage.getItem('wordOfTheDay')){
     localStorage.setItem('wordOfTheDay', `${randomWord.toUpperCase()}`)
+   } else if(!localStorage.getItem('wordleGameState')){
+    localStorage.setItem('wordleGameState', JSON.stringify(wordle.geussWord))
    }
 
    if(todayDate !== lastDate){
+    localStorage.removeItem('')
     getBodyImage(chooseAnimorCharNumber())
     localStorage.setItem('wordOfTheDay', `${randomWord.toUpperCase()}`)
+    localStorage.setItem('wordleGameState', JSON.stringify(false))
     localStorage.setItem('lastDate', todayDate)
    } else{
     document.body.style.backgroundImage = localStorage.getItem('bodyImage')
