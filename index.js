@@ -6,8 +6,15 @@ import { wordleArrFive } from './wordle-data.js'
 //Event Listeners for Link components, etc.
 
 document.addEventListener('DOMContentLoaded', (e) => {
-    createWordleBoxHtml()
-    createKeyBoardHtml(wordle.keyboard)
+
+    if(localStorage.getItem('row') === "0"){
+        createWordleBoxHtml()
+        createKeyBoardHtml(wordle.keyboard)
+    } else{
+        let wordleHtml = document.querySelector('.wordle-container').innerHTML
+        localStorage.setItem('currentWordleHtml', JSON.stringify(wordleHtml))
+        wordleHtml = JSON.parse(localStorage.getItem('currentWordleHtml'))
+    }
 }) 
 
 document.addEventListener('keydown', (e) => {
@@ -31,6 +38,7 @@ document.addEventListener('keydown', (e) => {
             wordle.newWord = []
             setTimeout(() => {
                 wordle.row++
+                localStorage.setItem('row', JSON.stringify(wordle.row))
             }, 3 * 500)
         } else if(wordle.row === 5 && wordle.boxIndex === wordle.rowLimit()){
             verifyWordleWord()
@@ -114,10 +122,10 @@ const wordleMethods = () => {
     let rowLimit = 0
     let row = 0
 
-    localStorage.setItem('row', JSON.stringify(row))
-    let offRow = Number(localStorage.getItem('row'))
+
     localStorage.setItem('boxIndex', JSON.stringify(boxIndex))
     let offBoxIndex = Number(localStorage.getItem('boxIndex'))
+    boxIndex = offBoxIndex
     
     return {
         keyboard: [
@@ -129,8 +137,12 @@ const wordleMethods = () => {
         height: 6,
         width: 5,
         sWidth: 6,
-        row: offRow
-        ,
+        row: function(){
+            localStorage.setItem('row', JSON.stringify(row))
+            let offRow = Number(localStorage.getItem('row'))
+            row = offRow
+            return offRow
+        },
         getRandomArr: function() {
             const getRandomArr = Math.floor(Math.random() * this.mainArrays.length)
             let mainArr = this.mainArrays[getRandomArr]
@@ -161,13 +173,17 @@ const wordleMethods = () => {
         gameOver: false,
         geussWord: false,
         wordleNumCount: 0,
-        boxIndex: offBoxIndex
-        ,
+        boxIndex: function(){
+            localStorage.setItem('boxIndex', JSON.stringify(boxIndex))
+            let offBoxIndex = Number(localStorage.getItem('boxIndex'))
+            boxIndex = offBoxIndex
+            return offBoxIndex
+        },
         rowLimit: function(){
             rowLimit = (this.row + 1) * this.width
             localStorage.setItem('rowLimit', JSON.stringify(rowLimit))
             let offRowLimit = Number(localStorage.getItem('rowLimit'))
-            return offRowLimit
+            return rowLimit
         },
         newWord: [],
         theWord: function(){
@@ -177,6 +193,7 @@ const wordleMethods = () => {
 }
 
 const wordle = wordleMethods()
+
 
 
 const wordleWordColors = () => {
@@ -245,17 +262,22 @@ const updateTextViaKeyBoard = (keyId) => {
     if(key === `Backspace`){
         wordleBox[Math.max(0, wordle.boxIndex - 1)].textContent = ``
         wordle.newWord.pop(newString)
+        console.log(wordle.boxIndex)
         wordle.boxIndex--
         wordle.wordleNumCount--
+        localStorage.setItem('boxIndex', JSON.stringify(wordle.boxIndex))
     }
      else{
         wordleBox[Math.max(0, wordle.boxIndex)].textContent = newString
         wordle.newWord.push(newString)
+        console.log(wordle.boxIndex)
         wordle.boxIndex++
         wordle.wordleNumCount++
+        localStorage.setItem('boxIndex', JSON.stringify(wordle.boxIndex))
     }
 }
 
+console.log(wordle.boxIndex)
 
 const updateTextViaDiv = (keyId) => {
     const wordleBox = document.querySelectorAll('.wordle-box')
