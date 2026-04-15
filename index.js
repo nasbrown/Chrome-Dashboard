@@ -6,21 +6,23 @@ import { wordleArrFive } from './wordle-data.js'
 //Event Listeners for Link components, etc.
 
 document.addEventListener('DOMContentLoaded', () => {
-
-        if(localStorage.getItem('row') === '0'){
+    
+        //if(localStorage.getItem('row') === '0'){
             createWordleBoxHtml()
             createKeyBoardHtml(wordle.keyboard)
             localStorage.setItem('row', JSON.stringify(0))
             localStorage.setItem('boxIndex', JSON.stringify(0))
             localStorage.setItem('rowLimit', JSON.stringify(0))
             console.log('1st')
-        } else{
+        //} 
+        /*
+        else{
             wordle.row = Number(localStorage.getItem('row'))
             wordle.boxIndex = Number(localStorage.getItem('boxIndex'))
             Number(localStorage.getItem('rowLimit'))
             console.log('2nd')
             document.querySelector('.wordle-container').innerHTML = JSON.parse(localStorage.getItem('wordleHTML'))
-        }
+        } */
 
 }) 
 
@@ -85,6 +87,7 @@ document.addEventListener('click', (e) => {
     const mainDash = document.querySelector('.dash-container')
     const pomoDash = document.querySelector('.pomo-container')
     const wordleDash = document.querySelector('.wordle-container')
+    const wordleHint = document.querySelector('.wordle-modal')
     
     if(e.target.dataset.linkId){
         mainLinkArr.deleteLink(e.target.dataset.linkId)
@@ -101,7 +104,15 @@ document.addEventListener('click', (e) => {
         mainDash.classList.toggle('hidden')
         wordleDash.classList.toggle('hidden')
 
-    } else if(e.target.id === 'return-wordle'){
+    } else if (e.target.id === 'lightbulb') {
+        wordleHint.classList.toggle('hidden')
+        
+    } else if (e.target.closest('.wordle-close')) {
+        wordleHint.classList.toggle('hidden')
+        console.log('Hey')
+    } 
+    
+    else if(e.target.id === 'return-wordle'){
         wordleDash.classList.toggle('hidden')
         mainDash.classList.toggle('hidden')
 
@@ -209,10 +220,12 @@ const wordleWordColors = () => {
             if(key === testWord[i]){
               wordleBox[i + (wordle.row * wordle.width)].animate(keyframes, options)
               wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor = `green`
+              wordleBox[i + (wordle.row * wordle.width)].style.border = `white solid 2px`
 
               wordleKeyData.forEach((word) => {
                     if(key === word.textContent){
                         word.style.backgroundColor = `green`
+                         word.style.border = `white solid 2px`
                     }
                 })
             } 
@@ -220,10 +233,12 @@ const wordleWordColors = () => {
             if(testWord.includes(key) && wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor !== `green`){
                 wordleBox[i + (wordle.row * wordle.width)].animate(keyframes, options)
                 wordleBox[i + (wordle.row * wordle.width)].style.backgroundColor = `#FFD300`
+                wordleBox[i + (wordle.row * wordle.width)].style.border = `white solid 2px`
 
                 wordleKeyData.forEach((word) => {
                     if(key === word.textContent){
                         word.style.backgroundColor = `#FFD300`
+                        word.style.border = `white solid 2px`
                     }
                 })
             }

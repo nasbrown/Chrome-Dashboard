@@ -258,6 +258,7 @@ h1{
     flex-direction: column;
     align-items: center;
     row-gap: 1.5rem;
+    position: relative;
 }
 
 .wordle-menu{
@@ -308,6 +309,12 @@ h1{
     row-gap: .25rem;
 }
 
+.how-to-board{
+    display: flex;
+    flex-direction: row;
+    column-gap: .5rem;
+}
+
 .wordle-box{
     width: 60px;
     height: 60px;
@@ -348,6 +355,33 @@ h1{
     border: solid 1px black;
     font-weight: bold;
     transition-delay: 3ms;
+}
+
+#wordle-modal{
+    width: 75%;
+    height: 35rem;
+    padding: 1rem;
+    border: solid 3px black;
+    background-color: #464646;
+    z-index: 2;
+    position: absolute;
+}
+
+.wordle-modal-cntr{
+    position: relative;
+}
+
+.wordle-close{
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+}
+
+.white-border{
+    border: white solid 2px;
 }
 
 .hidden{
