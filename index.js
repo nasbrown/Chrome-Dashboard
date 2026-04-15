@@ -764,6 +764,7 @@ const getLocalStorageItemsOnceADay = () => {
     localStorage.setItem('wordOfTheDay', `${randomWord.toUpperCase()}`)
     localStorage.setItem('wordleGameState', JSON.stringify(false))
     localStorage.setItem('lastDate', todayDate)
+    localStorage.setItem('row', JSON.stringify(0))
    } else{
     document.body.style.backgroundImage = localStorage.getItem('bodyImage')
    }
