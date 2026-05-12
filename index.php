@@ -261,19 +261,19 @@
                     <strong>Examples</strong>
                 </p>
                 <div class="how-to-board">
-                    <div class="wordle-box white-border" style="background-color: green;">I</div>
-                    <div class="wordle-box white-border">M</div>
-                    <div class="wordle-box white-border">A</div>
-                    <div class="wordle-box white-border">G</div>
-                    <div class="wordle-box white-border">E</div>
+                    <div class="wordle-exp-box white-border" style="background-color: green;">I</div>
+                    <div class="wordle-exp-box white-border">M</div>
+                    <div class="wordle-exp-box white-border">A</div>
+                    <div class="wordle-exp-box white-border">G</div>
+                    <div class="wordle-exp-box white-border">E</div>
                 </div>
                 <p><strong>I</strong> is the word and in the correct spot.</p>
                 <div class="how-to-board">
-                    <div class="wordle-box white-border">G</div>
-                    <div class="wordle-box white-border" style="background-color: #FFD300;">U</div>
-                    <div class="wordle-box white-border">N</div>
-                    <div class="wordle-box white-border">N</div>
-                    <div class="wordle-box white-border">A</div>
+                    <div class="wordle-exp-box white-border">G</div>
+                    <div class="wordle-exp-box white-border" style="background-color: #FFD300;">U</div>
+                    <div class="wordle-exp-box white-border">N</div>
+                    <div class="wordle-exp-box white-border">N</div>
+                    <div class="wordle-exp-box white-border">A</div>
                 </div>
                 <p><strong>U</strong> is the word but in the wrong spot.</p>
                 <button class="wordle-close" type="button">

@@ -6,33 +6,27 @@ import { wordleArrFive } from './wordle-data.js'
 //Event Listeners for Link components, etc.
 
 document.addEventListener('DOMContentLoaded', () => {
-    
-        //if(localStorage.getItem('row') === '0'){
-            createWordleBoxHtml()
-            createKeyBoardHtml(wordle.keyboard)
-            localStorage.setItem('row', JSON.stringify(0))
-            localStorage.setItem('boxIndex', JSON.stringify(0))
-            localStorage.setItem('rowLimit', JSON.stringify(0))
-            console.log('1st')
-        //} 
-        /*
-        else{
-            wordle.row = Number(localStorage.getItem('row'))
-            wordle.boxIndex = Number(localStorage.getItem('boxIndex'))
-            Number(localStorage.getItem('rowLimit'))
-            console.log('2nd')
-            document.querySelector('.wordle-container').innerHTML = JSON.parse(localStorage.getItem('wordleHTML'))
-        } */
-
+            if(localStorage.getItem('row') === '0'){
+                createWordleBoxHtml()
+                createKeyBoardHtml(wordle.keyboard)
+                localStorage.setItem('row', JSON.stringify(0))
+                localStorage.setItem('boxIndex', JSON.stringify(0))
+                localStorage.setItem('rowLimit', JSON.stringify(0))
+            } else{
+                document.querySelector('.wordle-container').innerHTML = JSON.parse(localStorage.getItem('wordleHTML'))
+                wordle.row  = Number(localStorage.getItem('row'))
+                wordle.boxIndex  = Number(localStorage.getItem('boxIndex'))
+            }
 }) 
 
 document.addEventListener('keydown', (e) => {
     const pressedKey = e.key
     const isLetter = /^[a-zA-Z]$/.test(pressedKey)
 
-    if(localStorage.getItem('wordleGameState') === "false"){
-        if(isLetter){
-        if(wordle.boxIndex < wordle.rowLimit()){
+    if(!document.querySelector('.wordle-container').classList.contains('hidden')){
+        if(localStorage.getItem('wordleGameState') === "false"){
+            if(isLetter){
+                if(wordle.boxIndex < wordle.rowLimit()){
             updateTextViaKeyBoard(pressedKey)
         }
      } else if(pressedKey === `Backspace`){
@@ -61,6 +55,7 @@ document.addEventListener('keydown', (e) => {
      }
     } else{
         alert(`You Won!, Game Over! Stay tune for the new word tomorrow!`)
+    }
     }
 })
 
@@ -142,6 +137,8 @@ const wordleMethods = () => {
     let boxIndex = 0
     let rowLimit = 0
     let row = 0
+    row = Number(localStorage.getItem('row'))
+    boxIndex = Number(localStorage.getItem('boxIndex'))
     
     return {
         keyboard: [
@@ -188,7 +185,7 @@ const wordleMethods = () => {
         rowLimit: function(){
             rowLimit = (this.row + 1) * this.width
             localStorage.setItem('rowLimit', JSON.stringify(rowLimit))
-            return rowLimit
+            return Number(localStorage.getItem('rowLimit'))
         },
         newWord: [],
         theWord: function(){
@@ -774,7 +771,6 @@ const getLocalStorageItemsOnceADay = () => {
    }
 
    if(todayDate !== lastDate){
-    localStorage.removeItem('')
     getBodyImage(chooseAnimorCharNumber())
     localStorage.setItem('wordOfTheDay', `${randomWord.toUpperCase()}`)
     localStorage.setItem('wordleGameState', JSON.stringify(false))
@@ -784,6 +780,7 @@ const getLocalStorageItemsOnceADay = () => {
     document.body.style.backgroundImage = localStorage.getItem('bodyImage')
    }
 }
+
 
 getLocalStorageItemsOnceADay()
 
