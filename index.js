@@ -1,5 +1,5 @@
-import mql from 'https://esm.sh/@microlink/mql'
-import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
+import * as mql from 'https://cdn.jsdelivr.net/npm/@microlink/vanilla@latest/dist/microlink.min.js'
+import { v4 as uuidv4 } from 'https://cdn.jsdelivr.net/npm/uuid@14.0.0/dist/rng.min.js'
 import { wordleArrFive } from './wordle-data.js'
 //Dictionary API for the Wordle to implement --- https://dictionaryapi.dev/
 
