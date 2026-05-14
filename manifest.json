@@ -8,5 +8,9 @@
     },
     "chrome_url_overrides": {
         "newtab": "index.html"
-    }
+    },
+    "content_scripts": [{
+  "js": ["./node_modules/@microlink/mql/src/main.mjs", "index.js"],
+  "matches": ["<all_urls>"]
+}]
 }

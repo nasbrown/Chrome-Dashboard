@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@microlink/mql": "^0.16.1"
+  }
+}

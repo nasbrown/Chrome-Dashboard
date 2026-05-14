@@ -1,5 +1,4 @@
-import * as mql from 'https://cdn.jsdelivr.net/npm/@microlink/vanilla@latest/dist/microlink.min.js'
-import { v4 as uuidv4 } from 'https://cdn.jsdelivr.net/npm/uuid@14.0.0/dist/rng.min.js'
+import mql from './node_modules/@microlink/mql/src/main.mjs'
 import { wordleArrFive } from './wordle-data.js'
 //Dictionary API for the Wordle to implement --- https://dictionaryapi.dev/
 
@@ -655,11 +654,13 @@ const getLinkArr = async (website) => {
     const title = await getLinkTitle(website)
     const image = await getLinkImage(website)
 
+    const myUuid = crypto.randomUUID()
+
     mainLinkArr.newLink({
         linkTitle: title,
         linkImg: image,
         linkName: website,
-        uuid: uuidv4(),
+        uuid: myUuid,
     })
 
     return mainLinkArr.getLinks()
