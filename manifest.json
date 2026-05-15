@@ -2,6 +2,7 @@
     "manifest_version": 3,
     "name": "Personall Dashboard",
     "version": "1.0.0",
+    "permissions": ["identity"],
     "description": "Wife's extension",
     "action": {
         "default_icon": "dash.png"

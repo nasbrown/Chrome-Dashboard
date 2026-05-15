@@ -129,6 +129,17 @@ document.addEventListener('click', (e) => {
     }
 })
 
+//Google Calendar Component
+
+ chrome.identity.getAuthToken({ interactive: true }, function(token) {
+  if (chrome.runtime.lastError) {
+    console.error(chrome.runtime.lastError);
+    return;
+  }
+  console.log('Access Token:', token);
+});
+   
+
 //Wordle Component
 
 const wordleMethods = () => {
